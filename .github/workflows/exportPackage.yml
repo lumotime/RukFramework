@@ -1,0 +1,52 @@
+name: APPLICATION_CI
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - "buildSrc/src/main/java/com/j3dream/android/build/Modules.kt"
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v1
+
+      - name: checkout keystone
+        uses: actions/checkout@v2
+        with:
+          repository: lumotime/lumoKeystone
+          path: keystone
+          token: ${{secrets.GIT_TOKEN}}
+
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Build with Gradle generate modules apks
+        run: chmod +x gradlew &&./gradlew assembleRelease
+
+      - name: Get git log info
+        id: git_log
+        uses: lumotime/get-git-log-action@v1.0.0
+
+      - name: Upload idreceiver Apk
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{steps.idreceiverapkinfo.outputs.name}}-release-${{steps.idreceiverapkinfo.outputs.versionName}}.apk
+          path: idreceiver/build/outputs/apk/release/idreceiver-release.apk
+
+      - name: Get idreceiver Apk Info
+        id: idreceiverapkinfo
+        uses: lumotime/get-apk-info-action@v1.0.0
+        with:
+          apkPath: idreceiver/build/outputs/apk/release/idreceiver-release.apk
+
+      - name: Upload idreceiver To Pgyer
+        id: idreceiverpgterinfo
+        uses: lumotime/upload-pgyer-apk-file@v1.0.0
+        with:
+          forms: '{"_api_key":"${{secrets.pgyer_key}}","buildInstallType":2, "buildPassword": "${{secrets.pgyer_install_password}}"}'
+          fileForms: '{"file":"idreceiver/build/outputs/apk/release/idreceiver-release.apk"}'
