@@ -30,7 +30,7 @@ internal object DepVersions {
     }
 
     object Framework {
-        const val core = "0.0.1-SNAPSHOT"
+        const val core = "0.0.1"
     }
 
     object Test {
