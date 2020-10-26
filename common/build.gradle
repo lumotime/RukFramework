@@ -6,11 +6,11 @@ apply plugin: 'maven'
 
 dependencies {
     api(Dependencies.FrameWork.core)
-    implementation(Dependencies.guava)
-    implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.AndroidX.appcompat)
-    implementation(Dependencies.AndroidX.core_ktx)
-    implementation(Dependencies.eventbus)
+    api(Dependencies.guava)
+    api(Dependencies.kotlin_stdlib)
+    api(Dependencies.AndroidX.appcompat)
+    api(Dependencies.AndroidX.core_ktx)
+    api(Dependencies.eventbus)
 }
 
 // 配置上传指令

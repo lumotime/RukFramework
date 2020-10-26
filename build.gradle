@@ -17,7 +17,7 @@ allprojects {
         google()
         jcenter()
         maven{
-            url('http://repo.novakj.cn/repository/maven-snapshots/')
+            url('http://repo.novakj.cn/repository/maven-releases/')
         }
     }
 }
