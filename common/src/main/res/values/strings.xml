@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="default_app_logger_tag">RukFramework</string>
+    <string name="log_file_name_template">%s.log</string>
+    <string name="crash_capture_log_tmplate">Crash Handler capture global exception, %s</string>
+    <string name="grant_permission_message">已授予权限</string>
+    <string name="not_grant_permission_message">未授予权限</string>
+</resources>
