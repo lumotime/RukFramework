@@ -29,6 +29,10 @@ internal object DepVersions {
         const val codec = "1.14"
     }
 
+    object Framework {
+        const val core = "0.0.1-SNAPSHOT"
+    }
+
     object Test {
         const val junit = "4.12"
         const val junit_android = "1.1.1"

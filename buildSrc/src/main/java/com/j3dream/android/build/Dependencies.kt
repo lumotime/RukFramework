@@ -30,6 +30,10 @@ object Dependencies {
         val codec = buildDependency("commons-codec:commons-codec", DepVersions.Commons.codec)
     }
 
+    object FrameWork {
+        val core = buildDependency("com.j3dream:core", DepVersions.Framework.core)
+    }
+
     object Test {
         val junit = buildDependency("junit:junit", DepVersions.Test.junit)
         val junit_android = buildDependency("androidx.test.ext:junit", DepVersions.Test.junit_android)
