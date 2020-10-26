@@ -1,6 +1,8 @@
 import com.j3dream.android.build.Dependencies
+import com.j3dream.android.build.Modules
 
 apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
+apply plugin: 'maven'
 
 dependencies {
     api(Dependencies.FrameWork.core)
@@ -9,4 +11,23 @@ dependencies {
     implementation(Dependencies.AndroidX.appcompat)
     implementation(Dependencies.AndroidX.core_ktx)
     implementation(Dependencies.eventbus)
+}
+
+// 配置上传指令
+uploadArchives {
+    configuration = configurations.archives
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO_RELEASE_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+            pom.project {
+                version Modules.M_common.versionName
+                artifactId "common"
+                groupId GROUP_ID
+                packaging TYPE
+                description DESCRIPTION
+            }
+        }
+    }
 }

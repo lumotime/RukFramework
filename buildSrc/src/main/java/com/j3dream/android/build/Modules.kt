@@ -19,4 +19,5 @@ object Modules{
      * example android application build config
      */
     val M_example = ModuleInfo("com.j3dream.android.example", 1001, "0.01.001")
+    val M_common = ModuleInfo("com.j3dream.android.common")
 }
