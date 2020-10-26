@@ -1,3 +1,4 @@
+include ':common'
 rootProject.name = "RukFramework"
 
 include ':example'

@@ -1,0 +1,9 @@
+import com.j3dream.android.build.Dependencies
+
+apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
+
+dependencies {
+    api("com.j3dream:core:0.0.1-SNAPSHOT")
+    implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.AndroidX.core_ktx)
+}
