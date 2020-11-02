@@ -20,4 +20,5 @@ object Modules{
      */
     val M_example = ModuleInfo("com.j3dream.android.example", 1001, "0.01.001")
     val M_common = ModuleInfo("com.j3dream.android.common")
+    val M_idreader = ModuleInfo("com.j3dream.android.idreader")
 }

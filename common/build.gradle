@@ -4,6 +4,18 @@ import com.j3dream.android.build.Modules
 apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
 apply plugin: 'maven'
 
+android {
+
+    defaultConfig {
+        versionCode Modules.M_common.versionCode
+        versionName Modules.M_common.versionName
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
 dependencies {
     api(Dependencies.FrameWork.core)
     api(Dependencies.guava)
