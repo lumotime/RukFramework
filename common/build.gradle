@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-    api(Dependencies.FrameWork.core)
+    api(Dependencies.Framework.core)
     api(Dependencies.guava)
     api(Dependencies.kotlin_stdlib)
     api(Dependencies.AndroidX.appcompat)

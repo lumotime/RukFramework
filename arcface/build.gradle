@@ -1,3 +1,4 @@
+import com.j3dream.android.build.Dependencies
 import com.j3dream.android.build.Modules
 
 apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
@@ -17,6 +18,8 @@ android {
 
 dependencies {
     api(project(":common"))
+    // 人脸引擎需要使用的commons-pool2线程池
+    implementation("org.apache.commons:commons-pool2:2.8.0")
 }
 
 // 配置上传指令
