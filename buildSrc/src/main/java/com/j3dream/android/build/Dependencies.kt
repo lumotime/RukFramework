@@ -15,10 +15,8 @@ object Dependencies {
 
     val kotlin_stdlib = buildDependency("org.jetbrains.kotlin:kotlin-stdlib", DepVersions.kotlin)
     val Luban = buildDependency("top.zibin:Luban", DepVersions.Luban)
-    val rxpermissions = buildDependency(
-        "com.github.tbruyelle:rxpermissions",
-        DepVersions.rxpermissions
-    )
+    val rxpermissions =
+        buildDependency("com.github.tbruyelle:rxpermissions", DepVersions.rxpermissions)
     val BaseRecyclerViewAdapterHelper = buildDependency(
         "com.github.CymChad:BaseRecyclerViewAdapterHelper",
         DepVersions.BaseRecyclerViewAdapterHelper
@@ -26,10 +24,6 @@ object Dependencies {
     val logger_orhanobut = buildDependency("com.orhanobut:logger", DepVersions.logger_orhanobut)
     val okio = buildDependency("com.squareup.okio:okio", DepVersions.okio)
     val okhttp = buildDependency("com.squareup.okhttp3:okhttp", DepVersions.okhttp)
-    val okhttp_interceptor_logger = buildDependency(
-        "com.squareup.okhttp3:logging-interceptor",
-        DepVersions.okhttp_interceptor_logger
-    )
     val guava = buildDependency("com.google.guava:guava", DepVersions.guava)
     val gson = buildDependency("com.google.code.gson:gson", DepVersions.gson)
     val glide = buildDependency("com.github.bumptech.glide:glide", DepVersions.glide)
@@ -44,6 +38,10 @@ object Dependencies {
     )
     val retrofit_convert_gson =
         buildDependency("com.squareup.retrofit2:converter-gson", DepVersions.retrofit_convert_gson)
+    val okhttp_interceptor_logger = buildDependency(
+        "com.squareup.okhttp3:logging-interceptor",
+        DepVersions.okhttp_interceptor_logger
+    )
 
     object Commons {
         val codec = buildDependency("commons-codec:commons-codec", DepVersions.Commons.codec)
@@ -54,6 +52,14 @@ object Dependencies {
         val core = buildDependency("com.j3dream:core", DepVersions.Framework.core)
         val common_android =
             buildDependency("com.j3dream.android:common", DepVersions.Framework.common_android)
+        val idreader_android =
+            buildDependency("com.j3dream.android:idreader", DepVersions.Framework.idreader_android)
+        val arcface_android =
+            buildDependency("com.j3dream.android:arcface", DepVersions.Framework.arcface_android)
+        val net_android =
+            buildDependency("com.j3dream.android:net", DepVersions.Framework.net_android)
+        val camera_android =
+            buildDependency("com.j3dream.android:camera", DepVersions.Framework.camera_android)
     }
 
     object Test {
@@ -67,7 +73,11 @@ object Dependencies {
         val appcompat = buildDependency("androidx.appcompat:appcompat", DepVersions.AndroidX.appcompat)
         val constraintlayout = buildDependency("androidx.constraintlayout:constraintlayout", DepVersions.AndroidX.constraintlayout)
         val multidex = buildDependency("androidx.multidex:multidex", DepVersions.AndroidX.multidex)
-        val recyclerview = buildDependency("androidx.recyclerview:recyclerview", DepVersions.AndroidX.recyclerview)
+        val recyclerview = buildDependency(
+            "androidx.recyclerview:recyclerview",
+            DepVersions.AndroidX.recyclerview
+        )
+
     }
 
     object Tencent {

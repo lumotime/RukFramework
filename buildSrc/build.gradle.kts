@@ -1,7 +1,7 @@
 repositories {
     google()
     jcenter()
-    maven("http://47.105.177.125:8081/repository/maven-releases/")
+    maven("http://repo.novakj.cn/repository/maven-releases/")
 }
 
 plugins {
@@ -10,5 +10,5 @@ plugins {
 
 dependencies{
     // 基础Java工具集合
-    implementation("com.j3dream:core:0.0.1")
+    implementation("com.j3dream:core:0.1.1")
 }

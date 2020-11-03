@@ -34,7 +34,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return 设置的布局资源 只接受 'View, @LayoutRes int' 类型参数
      */
-    protected abstract Object setLayoutRes();
+    protected abstract Object setLayoutRes(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
 
     /**
      * 初始化活动相关数据
@@ -60,7 +60,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = getContentViewRes(setLayoutRes(), inflater, container);
+        mContentView = getContentViewRes(setLayoutRes(inflater, container, savedInstanceState), inflater, container);
         initConfigs(mContentView);
         bindViews(mContentView);
         initData();
