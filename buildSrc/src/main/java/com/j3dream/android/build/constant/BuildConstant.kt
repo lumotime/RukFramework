@@ -15,7 +15,7 @@ import java.io.File
  */
 object BuildConstant{
     const val DEF_MIN_VERSION_CODE = 1001
-    const val DEF_MIN_VERSION_NAME = "0.01.001"
+    const val DEF_MIN_VERSION_NAME = "0.1.1"
     const val DEF_COMPILE_SDK_VERSION = 29
     const val DEF_BUILD_TOOLS_VERSION = "29.0.3"
     const val DEF_MIN_SDK_VERSION = 21
