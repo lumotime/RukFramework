@@ -20,10 +20,16 @@ internal object DepVersions {
     const val logger_orhanobut = "2.2.0"
     const val okio = "2.4.1"
     const val okhttp = "3.12.0"
+    const val okhttp_interceptor_logger = "3.4.0"
     const val guava = "29.0-android"
     const val gson = "2.8.5"
     const val glide = "4.11.0"
     const val eventbus = "3.1.1"
+    const val rxjava = "2.2.11"
+    const val rxandroid = "2.1.1"
+    const val retrofit = "2.3.0"
+    const val retrofit_convert_rxjava = retrofit
+    const val retrofit_convert_gson = retrofit
 
     object Commons {
         const val codec = "1.14"

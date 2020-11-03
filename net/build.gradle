@@ -1,3 +1,5 @@
+import com.j3dream.android.build.DepVersions
+import com.j3dream.android.build.Dependencies
 import com.j3dream.android.build.Modules
 
 apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
@@ -17,6 +19,13 @@ android {
 
 dependencies {
     api(project(":common"))
+    api(Dependencies.okhttp)
+    api(Dependencies.okhttp_interceptor_logger)
+    api(Dependencies.rxjava)
+    api(Dependencies.rxandroid)
+    api(Dependencies.retrofit)
+    api(Dependencies.retrofit_convert_gson)
+    api(Dependencies.retrofit_convert_rxjava)
 }
 
 // 配置上传指令

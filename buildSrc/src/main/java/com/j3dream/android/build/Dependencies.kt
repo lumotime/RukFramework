@@ -15,16 +15,35 @@ object Dependencies {
 
     val kotlin_stdlib = buildDependency("org.jetbrains.kotlin:kotlin-stdlib", DepVersions.kotlin)
     val Luban = buildDependency("top.zibin:Luban", DepVersions.Luban)
-    val rxpermissions = buildDependency("com.github.tbruyelle:rxpermissions", DepVersions.rxpermissions)
-    val BaseRecyclerViewAdapterHelper = buildDependency("com.github.CymChad:BaseRecyclerViewAdapterHelper", DepVersions.BaseRecyclerViewAdapterHelper)
+    val rxpermissions = buildDependency(
+        "com.github.tbruyelle:rxpermissions",
+        DepVersions.rxpermissions
+    )
+    val BaseRecyclerViewAdapterHelper = buildDependency(
+        "com.github.CymChad:BaseRecyclerViewAdapterHelper",
+        DepVersions.BaseRecyclerViewAdapterHelper
+    )
     val logger_orhanobut = buildDependency("com.orhanobut:logger", DepVersions.logger_orhanobut)
     val okio = buildDependency("com.squareup.okio:okio", DepVersions.okio)
     val okhttp = buildDependency("com.squareup.okhttp3:okhttp", DepVersions.okhttp)
+    val okhttp_interceptor_logger = buildDependency(
+        "com.squareup.okhttp3:logging-interceptor",
+        DepVersions.okhttp_interceptor_logger
+    )
     val guava = buildDependency("com.google.guava:guava", DepVersions.guava)
     val gson = buildDependency("com.google.code.gson:gson", DepVersions.gson)
     val glide = buildDependency("com.github.bumptech.glide:glide", DepVersions.glide)
     val glide_compiler = buildDependency("com.github.bumptech.glide:compiler", DepVersions.glide)
     val eventbus = buildDependency("org.greenrobot:eventbus", DepVersions.eventbus)
+    val rxjava = buildDependency("io.reactivex.rxjava2:rxjava", DepVersions.rxjava)
+    val rxandroid = buildDependency("io.reactivex.rxjava2:rxandroid", DepVersions.rxandroid)
+    val retrofit = buildDependency("com.squareup.retrofit2:retrofit", DepVersions.retrofit)
+    val retrofit_convert_rxjava = buildDependency(
+        "com.squareup.retrofit2:adapter-rxjava2",
+        DepVersions.retrofit_convert_rxjava
+    )
+    val retrofit_convert_gson =
+        buildDependency("com.squareup.retrofit2:converter-gson", DepVersions.retrofit_convert_gson)
 
     object Commons {
         val codec = buildDependency("commons-codec:commons-codec", DepVersions.Commons.codec)
@@ -33,7 +52,8 @@ object Dependencies {
 
     object Framework {
         val core = buildDependency("com.j3dream:core", DepVersions.Framework.core)
-        val common_android = buildDependency("com.j3dream.android:common", DepVersions.Framework.common_android)
+        val common_android =
+            buildDependency("com.j3dream.android:common", DepVersions.Framework.common_android)
     }
 
     object Test {
