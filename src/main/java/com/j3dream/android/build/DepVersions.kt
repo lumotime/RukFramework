@@ -24,6 +24,11 @@ internal object DepVersions {
     const val gson = "2.8.5"
     const val glide = "4.11.0"
     const val eventbus = "3.1.1"
+    const val rxjava = "2.2.11"
+    const val rxandroid = "2.1.1"
+    const val retrofit = "2.3.0"
+    const val retrofit_convert_rxjava = retrofit
+    const val retrofit_convert_gson = retrofit
 
     object Commons {
         const val codec = "1.14"
@@ -32,7 +37,11 @@ internal object DepVersions {
 
     object Framework {
         const val core = "0.1.1"
-        const val common_android = "0.1.1"
+        const val common_android = "0.1.1@aar"
+        const val idreader_android = "0.1.1@aar"
+        const val arcface_android = "0.1.1@aar"
+        const val net_android = "0.1.1@aar"
+        const val camera_android = "0.1.1@aar"
     }
 
     object Test {
