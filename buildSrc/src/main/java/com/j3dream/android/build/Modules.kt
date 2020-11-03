@@ -22,4 +22,6 @@ object Modules{
     val M_common = ModuleInfo("com.j3dream.android.common")
     val M_idreader = ModuleInfo("com.j3dream.android.idreader")
     val M_arcface = ModuleInfo("com.j3dream.android.arcface")
+    val M_net = ModuleInfo("com.j3dream.android.net")
+    val M_camera = ModuleInfo("com.j3dream.android.camera")
 }

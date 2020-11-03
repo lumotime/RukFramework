@@ -35,7 +35,7 @@ uploadArchives {
             }
             pom.project {
                 version Modules.M_common.versionName
-                artifactId "common"
+                artifactId "$project.name"
                 groupId GROUP_ID
                 packaging TYPE
                 description DESCRIPTION

@@ -29,7 +29,7 @@ uploadArchives {
             }
             pom.project {
                 version Modules.M_idreader.versionName
-                artifactId "idreader"
+                artifactId "$project.name"
                 groupId GROUP_ID
                 packaging TYPE
                 description DESCRIPTION
