@@ -11,7 +11,6 @@ import android.view.Window;
 import android.widget.ProgressBar;
 
 import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,8 +74,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IViewLoa
      *
      * @return 设置的布局资源 只接受 'View, @LayoutRes int' 类型参数
      */
-    @LayoutRes
-    protected abstract int setLayoutRes();
+    protected abstract Object setLayoutRes();
 
     /**
      * 初始化活动相关数据

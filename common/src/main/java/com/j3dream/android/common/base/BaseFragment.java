@@ -7,10 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.j3dream.android.common.exception.InitContentViewException;
 
 /**
  * <p>文件名称: BaseFragment </p>
@@ -33,8 +34,7 @@ public abstract class BaseFragment extends Fragment {
      *
      * @return 设置的布局资源 只接受 'View, @LayoutRes int' 类型参数
      */
-    @LayoutRes
-    protected abstract int setLayoutRes();
+    protected abstract Object setLayoutRes();
 
     /**
      * 初始化活动相关数据
@@ -60,7 +60,7 @@ public abstract class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(setLayoutRes(), container, false);
+        mContentView = getContentViewRes(setLayoutRes(), inflater, container);
         initConfigs(mContentView);
         bindViews(mContentView);
         initData();
@@ -78,5 +78,20 @@ public abstract class BaseFragment extends Fragment {
      */
     protected void bindViews(View rootView) {
 
+    }
+
+    /**
+     * 设置当前活动的布局资源
+     *
+     * @param layoutRes 布局资源
+     */
+    private View getContentViewRes(Object layoutRes, LayoutInflater inflater, ViewGroup container) {
+        if (layoutRes instanceof Integer) {
+            return inflater.inflate((Integer) layoutRes, container, false);
+        } else if (layoutRes instanceof View) {
+            return (View) layoutRes;
+        } else {
+            throw new InitContentViewException("don't support u commit layout resource type!!!");
+        }
     }
 }
