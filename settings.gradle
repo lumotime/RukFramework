@@ -1,7 +1,9 @@
+
+rootProject.name = "RukFramework"
+
+include ':example'
+include ':camera'
 include ':net'
 include ':arcface'
 include ':idReader'
 include ':common'
-rootProject.name = "RukFramework"
-
-include ':example'
