@@ -27,10 +27,12 @@ internal object DepVersions {
 
     object Commons {
         const val codec = "1.14"
+        const val pool2 = "2.8.0"
     }
 
     object Framework {
-        const val core = "0.0.1"
+        const val core = "0.1.1"
+        const val common_android = "0.1.1"
     }
 
     object Test {
