@@ -28,10 +28,12 @@ object Dependencies {
 
     object Commons {
         val codec = buildDependency("commons-codec:commons-codec", DepVersions.Commons.codec)
+        val pool2 = buildDependency("org.apache.commons:commons-pool2:", DepVersions.Commons.pool2)
     }
 
-    object FrameWork {
+    object Framework {
         val core = buildDependency("com.j3dream:core", DepVersions.Framework.core)
+        val common_android = buildDependency("com.j3dream.android:common", DepVersions.Framework.common_android)
     }
 
     object Test {
