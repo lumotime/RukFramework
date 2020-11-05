@@ -1,3 +1,4 @@
+import com.j3dream.android.build.Dependencies
 import com.j3dream.android.build.Modules
 
 apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
@@ -16,7 +17,7 @@ android {
 }
 
 dependencies {
-    api(project(":common"))
+    implementation(Dependencies.Framework.common_android){transitive = true}
 }
 
 // 配置上传指令

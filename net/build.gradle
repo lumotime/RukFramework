@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-    api(Dependencies.Framework.common_android)
+    implementation(Dependencies.Framework.common_android){transitive = true}
     api(Dependencies.okhttp)
     api(Dependencies.localDeps.okhttp_interceptor_logger)
     api(Dependencies.rxjava)

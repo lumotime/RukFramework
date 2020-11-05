@@ -17,7 +17,7 @@ android {
 }
 
 dependencies {
-    api(project(":common"))
+    implementation(Dependencies.Framework.common_android){transitive = true}
     // 人脸引擎需要使用的commons-pool2线程池
     implementation("org.apache.commons:commons-pool2:2.8.0")
 }

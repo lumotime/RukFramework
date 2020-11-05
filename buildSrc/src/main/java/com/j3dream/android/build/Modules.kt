@@ -20,8 +20,8 @@ object Modules{
      */
     val M_example = ModuleInfo("com.j3dream.android.example", 1001, "0.01.001")
     val M_common = ModuleInfo("com.j3dream.android.common", 1002, "0.1.2")
-    val M_idreader = ModuleInfo("com.j3dream.android.idreader")
-    val M_arcface = ModuleInfo("com.j3dream.android.arcface")
+    val M_idreader = ModuleInfo("com.j3dream.android.idreader", 1002, "0.1.2")
+    val M_arcface = ModuleInfo("com.j3dream.android.arcface", 1002, "0.1.2")
     val M_net = ModuleInfo("com.j3dream.android.net", 1002, "0.1.2")
     val M_camera = ModuleInfo("com.j3dream.android.camera")
 }
