@@ -17,9 +17,9 @@ android {
 }
 
 dependencies {
-    api(project(":common"))
+    api(Dependencies.Framework.common_android)
     api(Dependencies.okhttp)
-    api(Dependencies.okhttp_interceptor_logger)
+    api(Dependencies.localDeps.okhttp_interceptor_logger)
     api(Dependencies.rxjava)
     api(Dependencies.rxandroid)
     api(Dependencies.retrofit)

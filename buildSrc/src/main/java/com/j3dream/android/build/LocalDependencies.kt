@@ -11,4 +11,14 @@ package com.j3dream.android.build
  * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
  * @version v1.0
  */
-class LocalDependencies
+class LocalDependencies {
+
+    companion object {
+
+        const val v_okhttp_interceptor_logger = "3.11.0"
+    }
+
+
+    val okhttp_interceptor_logger =
+        Dependencies.buildDependency("com.squareup.okhttp3:logging-interceptor", DepVersions.okhttp)
+}
