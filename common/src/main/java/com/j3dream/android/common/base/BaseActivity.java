@@ -1,36 +1,40 @@
 package com.j3dream.android.common.base;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.ProgressBar;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.j3dream.android.common.R;
 import com.j3dream.android.common.annotate.BindEventBus;
 import com.j3dream.android.common.exception.InitContentViewException;
 import com.j3dream.android.common.interf.IViewLoading;
 import com.j3dream.android.common.interf.OnRequestPermissionsResultListener;
+import com.j3dream.android.common.util.AndroidThreadPoolUtils;
 import com.j3dream.android.common.util.DisplayUtils;
 import com.j3dream.android.common.util.IntentUtils;
 import com.j3dream.android.common.util.ToastUtils;
+import com.j3dream.core.util.ObjectUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,17 +57,17 @@ public abstract class BaseActivity extends AppCompatActivity implements IViewLoa
 
     protected Activity mActivity;
 
-    /**
-     * 基础的加载动画
-     */
-    private AlertDialog mLoadingDialog;
+    private final Map<Integer, OnRequestPermissionsResultListener> mRequestPermissionsResultListeners
+            = Maps.newHashMap();
 
     /**
      * 是否需要注册EventBus
      */
     private boolean isReceiveEventBus = Boolean.FALSE;
-    private Map<Integer, OnRequestPermissionsResultListener> mRequestPermissionsResultListeners
-            = Maps.newHashMap();
+    /**
+     * loading dialogs
+     */
+    protected List<Dialog> mLoadingDialogs = Lists.newArrayList();
 
     /**
      * 设置当前布局资源
@@ -101,11 +105,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IViewLoa
         setContentViewRes(setLayoutRes());
         mContext = this;
         mActivity = this;
-        // 初始化loading加载器
-        mLoadingDialog = new AlertDialog.Builder(mContext)
-                .setCancelable(false)
-                .setView(new ProgressBar(mContext))
-                .create();
         initConfigs();
         bindViews();
         initData();
@@ -121,33 +120,67 @@ public abstract class BaseActivity extends AppCompatActivity implements IViewLoa
 
     @Override
     public void showLoading() {
-        if (mLoadingDialog == null) {
-            mLoadingDialog = new AlertDialog.Builder(mContext)
-                    .setCancelable(false)
-                    .create();
+        if (AndroidThreadPoolUtils.isOnMainThread()) {
+            Dialog targetDialog;
+            if (ObjectUtils.isEmpty(mLoadingDialogs)) {
+                targetDialog = new AlertDialog.Builder(this)
+                        .create();
+                if (mLoadingDialogs == null) {
+                    mLoadingDialogs = Lists.newArrayList();
+                }
+                mLoadingDialogs.add(targetDialog);
+            } else {
+                targetDialog = mLoadingDialogs.get(0);
+            }
+
+            if (targetDialog != null) {
+                targetDialog.show();
+                int dialogSideLength = DisplayUtils.getLongSideSize() / 8;
+                Window window = targetDialog.getWindow();
+                if (window != null) {
+                    window.setLayout(dialogSideLength, dialogSideLength);
+                }
+                targetDialog.setContentView(R.layout.widget_base_loading_activity);
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showLoading();
+                }
+            });
         }
-        mLoadingDialog.show();
-        int dialogSideLength = DisplayUtils.getLongSideSize() / 8;
-        Window window = mLoadingDialog.getWindow();
-        if (window != null)
-            window.setLayout(dialogSideLength, dialogSideLength);
-        mLoadingDialog.setContentView(R.layout.widget_base_loading_activity);
     }
 
     @Override
     public void hideLoading() {
-        if (mLoadingDialog != null) {
-            mLoadingDialog.hide();
+        if (AndroidThreadPoolUtils.isOnMainThread()) {
+            for (Dialog mLoadingDialog : mLoadingDialogs) {
+                mLoadingDialog.cancel();
+            }
+            if (ObjectUtils.isNotEmpty(mLoadingDialogs)) {
+                Dialog dialog = mLoadingDialogs.get(0);
+                mLoadingDialogs.clear();
+                mLoadingDialogs.add(dialog);
+            }
+        } else {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoading();
+                }
+            });
         }
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if (mLoadingDialog != null) {
-            mLoadingDialog.dismiss();
-            mLoadingDialog = null;
+        for (Dialog mLoadingDialog : mLoadingDialogs) {
+            mLoadingDialog.cancel();
         }
+        mLoadingDialogs.clear();
+        unBindEventBus();
+        super.onDestroy();
     }
 
     /**
@@ -239,6 +272,15 @@ public abstract class BaseActivity extends AppCompatActivity implements IViewLoa
                 ToastUtils.show(R.string.grant_permission_message);
             else
                 ToastUtils.show(R.string.not_grant_permission_message);
+        }
+    }
+
+    private void unBindEventBus() {
+        // 事件总线许可通过, 事件总线解绑
+        boolean isRegistered = EventBus.getDefault().isRegistered(this);
+        if (isRegistered) {
+            EventBus.getDefault().removeAllStickyEvents();
+            EventBus.getDefault().unregister(this);
         }
     }
 }
