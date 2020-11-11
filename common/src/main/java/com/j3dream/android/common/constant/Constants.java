@@ -22,6 +22,7 @@ public interface Constants extends com.j3dream.core.constant.Constants {
     String SMS_TO = "smsto:";
     String SMS_BODY = "sms_body";
     String TEL = "tel:";
+    String UNKNOWN = "UNKNOWN";
     String CONTACTS_LIST_INTENT_TYPE = "vnd.android.cursor.item/phone";
 
     //# TimeDateUtils

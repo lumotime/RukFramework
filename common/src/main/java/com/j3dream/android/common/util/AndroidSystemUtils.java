@@ -1,22 +1,33 @@
 package com.j3dream.android.common.util;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Application;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.webkit.WebSettings;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
 
+import com.google.common.collect.Lists;
 import com.j3dream.android.common.constant.Constants;
+import com.j3dream.android.common.data.BatteryInfo;
+import com.j3dream.android.common.data.BluetoothInfo;
 import com.j3dream.android.common.data.CPUInfo;
+import com.j3dream.android.common.data.MemoryInfo;
 import com.j3dream.android.common.data.SysBuildInfo;
 import com.j3dream.android.common.log.Logger;
 import com.j3dream.core.constant.TextConstants;
@@ -25,6 +36,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Set;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static com.j3dream.android.common.constant.Constants.CHINA_OPERATOR_DIAN_XIN;
@@ -449,6 +462,124 @@ public class AndroidSystemUtils {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    /**
+     * 获取设备 电池 信息
+     *
+     * @return 电池信息
+     */
+    @Nullable
+    public static BatteryInfo getBatteryInfo() {
+        try {
+            BatteryInfo batteryInfo = new BatteryInfo();
+            Intent batteryStatus = Utils.getApp().registerReceiver(null,
+                    new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            if (batteryStatus != null) {
+                int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+                double batteryLevel = -1;
+                if (level != -1 && scale != -1) {
+                    batteryLevel = level / scale;
+                }
+                int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+                int plugState = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+                int health = batteryStatus.getIntExtra(BatteryManager.EXTRA_HEALTH, -1);
+                boolean present = batteryStatus.getBooleanExtra(BatteryManager.EXTRA_PRESENT, false);
+                String technology = batteryStatus.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY);
+                int temperature = batteryStatus.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, -1);
+                int voltage = batteryStatus.getIntExtra(BatteryManager.EXTRA_VOLTAGE, -1);
+                batteryInfo.setBr(String.format("%.2f", (batteryLevel * 100d)) + "%");
+                batteryInfo.setStatus(BatteryInfoHelper.batteryStatus(status));
+                batteryInfo.setPlugState(BatteryInfoHelper.batteryPlugged(plugState));
+                batteryInfo.setHealth(BatteryInfoHelper.batteryHealth(health));
+                batteryInfo.setPresent(present);
+                batteryInfo.setTechnology(technology);
+                batteryInfo.setTemperature(temperature / 10 + "℃");
+                if (voltage > 1000) {
+                    batteryInfo.setVoltage(voltage / 1000f + "V");
+                } else {
+                    batteryInfo.setVoltage(voltage + "V");
+                }
+                batteryInfo.setPower(BatteryInfoHelper.getBatteryCapacity(Utils.getApp()));
+            }
+            return batteryInfo;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取设备 蓝牙 信息
+     *
+     * @return 蓝牙信息
+     */
+    @Nullable
+    @RequiresPermission(Manifest.permission.BLUETOOTH)
+    public static BluetoothInfo getBluetoothInfo() {
+        try {
+            BluetoothInfo bluetoothInfo = new BluetoothInfo();
+            bluetoothInfo.setBluetoothAddress(Settings.Secure.getString(Utils.getApp().getContentResolver(),
+                    "bluetooth_address"));
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            bluetoothInfo.setEnabled(bluetoothAdapter.isEnabled());
+            bluetoothInfo.setPhoneName(bluetoothAdapter.getName());
+            Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+            ArrayList<BluetoothInfo.BluetoothDeviceInfo> devices = Lists.newArrayList();
+            for (BluetoothDevice bondedDevice : bondedDevices) {
+                BluetoothInfo.BluetoothDeviceInfo bluetoothDeviceInfo = new BluetoothInfo.BluetoothDeviceInfo();
+                bluetoothDeviceInfo.setName(bondedDevice.getName());
+                bluetoothDeviceInfo.setAddress(bondedDevice.getAddress());
+            }
+            bluetoothInfo.setDevice(devices);
+            return bluetoothInfo;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取设备 内存 信息
+     *
+     * @return 内存信息
+     */
+    @Nullable
+    public static MemoryInfo getMemoryInfo() {
+        Application app = Utils.getApp();
+        try {
+            MemoryInfo memoryInfo = new MemoryInfo();
+            memoryInfo.setRamMemory(MemoryInfoHelper.getTotalMemory(app));
+            memoryInfo.setRamAvailMemory(MemoryInfoHelper.getAvailMemory(app));
+            memoryInfo.setRomMemoryAvailable(MemoryInfoHelper.getRomSpace(app));
+            memoryInfo.setRomMemoryTotal(MemoryInfoHelper.getRomSpaceTotal(app));
+            memoryInfo.setSdCardMemoryAvailable(MemoryInfoHelper.getSdcardSize(app));
+            memoryInfo.setSdCardMemoryTotal(MemoryInfoHelper.getSdcardSizeTotal(app));
+            memoryInfo.setSdCardRealMemoryTotal(MemoryInfoHelper.getRealStorage(app));
+            return memoryInfo;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getDefaultUserAgent() {
+        String userAgent = null;
+        try {
+            Method localMethod = WebSettings.class.getDeclaredMethod("getDefaultUserAgent",
+                    Context.class);
+            if (localMethod != null) {
+                userAgent = (String) localMethod.invoke(WebSettings.class,
+                        new Object[]{Utils.getApp().getApplicationContext()});
+            }
+            if (userAgent == null) {
+                userAgent = System.getProperty("http.agent");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return TextUtils.isEmpty(userAgent) ? Constants.UNKNOWN : userAgent;
     }
 
     private static TelephonyManager getTelephonyManager() {
