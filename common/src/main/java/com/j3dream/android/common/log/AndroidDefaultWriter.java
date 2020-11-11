@@ -39,6 +39,8 @@ public class AndroidDefaultWriter implements ILoggerWriter {
             1, 1, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue(128)
     );
 
+    private StringBuffer mMessageCacheBuffer = new StringBuffer();
+
     private static List<File> orderByName(File file) {
         File[] files = file.listFiles();
         if (files == null) {
@@ -65,30 +67,6 @@ public class AndroidDefaultWriter implements ILoggerWriter {
         return fileList;
     }
 
-    @Override
-    public void write(int level, String tag, String message) {
-        if (StringUtils.isEmpty(message)) {
-            return;
-        }
-        message = NEWLINE
-                + String.format(MESSAGE_HEADER_FORMAT,
-                Logger.getLevelDesc(level), StringUtils.null2Length0(tag),
-                TimeDateUtils.timestamp2FormatTimeString())
-                + NEWLINE + message + NEWLINE;
-        LogConfig logConfig = Logger.getLogConfig();
-        int writeLevel = logConfig.getWriteLevel();
-        if (level < writeLevel) {
-            return;
-        }
-        File writeLogDir = logConfig.getWriteLogDir();
-        if (level > ILogger.W && level <= ILogger.A) {
-            writeLogThreadPoolExecutor.submit(new WriteErrorLoggerToDiskRunnable(writeLogDir, message));
-        } else {
-            writeLogThreadPoolExecutor.submit(new WriteLoggerToDiskRunnable(writeLogDir, message,
-                    logConfig.getWriteLogSingleFileLength()));
-        }
-    }
-
     private File createNewLogFile(File parentFile) {
         @SuppressLint("DefaultLocale")
         String filename = String.format(LOG_FILE_NAME_FORMAT, orderByName(parentFile).size());
@@ -102,7 +80,6 @@ public class AndroidDefaultWriter implements ILoggerWriter {
         }
         return null;
     }
-
     private class WriteLoggerToDiskRunnable implements Runnable {
         private File writeLogDir;
         private String waitWriteLogContext;
@@ -141,7 +118,6 @@ public class AndroidDefaultWriter implements ILoggerWriter {
             FileUtils.writeFileFromString(waitWriteFile, waitWriteLogContext, true);
         }
     }
-
     private class WriteErrorLoggerToDiskRunnable implements Runnable {
         private File writeLogDir;
         private String waitWriteLogContext;
@@ -169,6 +145,38 @@ public class AndroidDefaultWriter implements ILoggerWriter {
                 return;
             }
             FileUtils.writeFileFromString(errorLogFile, waitWriteLogContext, true);
+        }
+    }
+
+    @Override
+    public void write(int level, String tag, String message) {
+        if (StringUtils.isEmpty(message)) {
+            return;
+        }
+        message = NEWLINE
+                + String.format(MESSAGE_HEADER_FORMAT,
+                Logger.getLevelDesc(level), StringUtils.null2Length0(tag),
+                TimeDateUtils.timestamp2FormatTimeString())
+                + NEWLINE + message + NEWLINE;
+        LogConfig logConfig = Logger.getLogConfig();
+        int writeLevel = logConfig.getWriteLevel();
+        if (level < writeLevel) {
+            return;
+        }
+
+        mMessageCacheBuffer.append(message);
+        if (mMessageCacheBuffer.length() < logConfig.getWriteMaxCacheLength()) {
+            return;
+        }
+        message = mMessageCacheBuffer.toString();
+        mMessageCacheBuffer.delete(0, mMessageCacheBuffer.length());
+
+        File writeLogDir = logConfig.getWriteLogDir();
+        if (level > ILogger.W && level <= ILogger.A) {
+            writeLogThreadPoolExecutor.submit(new WriteErrorLoggerToDiskRunnable(writeLogDir, message));
+        } else {
+            writeLogThreadPoolExecutor.submit(new WriteLoggerToDiskRunnable(writeLogDir, message,
+                    logConfig.getWriteLogSingleFileLength()));
         }
     }
 }

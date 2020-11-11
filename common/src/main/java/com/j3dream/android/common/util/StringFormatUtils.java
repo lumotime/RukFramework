@@ -64,9 +64,8 @@ public class StringFormatUtils {
             StreamResult xmlOutput = new StreamResult(new StringWriter());
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.transform(xmlInput, xmlOutput);
-            xml = xmlOutput.getWriter().toString().replaceFirst(">", ">" + LINE_SEP);
+            xml = xmlOutput.getWriter().toString();
         } catch (Exception e) {
             e.printStackTrace();
         }

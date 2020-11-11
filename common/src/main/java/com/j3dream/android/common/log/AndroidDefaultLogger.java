@@ -3,6 +3,7 @@ package com.j3dream.android.common.log;
 import android.util.Log;
 
 import com.google.common.collect.Lists;
+import com.j3dream.android.common.util.AppUtils;
 import com.j3dream.android.common.util.StringFormatUtils;
 import com.j3dream.core.util.StringUtils;
 import com.j3dream.core.util.ThrowableUtils;
@@ -42,7 +43,7 @@ public class AndroidDefaultLogger implements ILogger {
     }
 
     @Override
-    public void v(String tag, String message, Object... args) {
+    public void vTag(String tag, String message, Object... args) {
         log(V, StringUtils.null2Length0(tag), message, args);
     }
 
@@ -52,7 +53,7 @@ public class AndroidDefaultLogger implements ILogger {
     }
 
     @Override
-    public void d(String tag, String message, Object... args) {
+    public void dTag(String tag, String message, Object... args) {
         log(D, StringUtils.null2Length0(tag), message, args);
     }
 
@@ -62,7 +63,7 @@ public class AndroidDefaultLogger implements ILogger {
     }
 
     @Override
-    public void i(String tag, String message, Object... args) {
+    public void iTag(String tag, String message, Object... args) {
         log(I, StringUtils.null2Length0(tag), message, args);
     }
 
@@ -77,7 +78,7 @@ public class AndroidDefaultLogger implements ILogger {
     }
 
     @Override
-    public void w(Throwable throwable, String tag, String message, Object... args) {
+    public void wTag(Throwable throwable, String tag, String message, Object... args) {
         loge(W, throwable, tag, message, args);
     }
 
@@ -92,7 +93,7 @@ public class AndroidDefaultLogger implements ILogger {
     }
 
     @Override
-    public void e(Throwable throwable, String tag, String message, Object... args) {
+    public void eTag(Throwable throwable, String tag, String message, Object... args) {
         loge(E, throwable, tag, message, args);
     }
 
@@ -107,7 +108,7 @@ public class AndroidDefaultLogger implements ILogger {
     }
 
     @Override
-    public void wtf(Throwable throwable, String tag, String message, Object... args) {
+    public void wtfTag(Throwable throwable, String tag, String message, Object... args) {
         loge(A, throwable, tag, message, args);
     }
 
@@ -137,7 +138,7 @@ public class AndroidDefaultLogger implements ILogger {
     }
 
     @Override
-    public void file(String tag, String message, Object... args) {
+    public void fileTag(String tag, String message, Object... args) {
         log(Integer.MAX_VALUE, tag, message, args);
     }
 
@@ -158,7 +159,7 @@ public class AndroidDefaultLogger implements ILogger {
         } else {
             messageBuilder.append(String.format(logMessage, logArgs.toArray()));
         }
-        String writeRawMessage = pMessage(new LogProxy(level), logTag, message, 255);
+        String writeRawMessage = pMessage(new LogProxy(level), logTag, messageBuilder.toString(), 255);
         if (level >= Integer.MAX_VALUE || logConfig.isWriteLog()) {
             Logger.getLoggerWriter().write(level, logTag, writeRawMessage);
         }
@@ -181,83 +182,88 @@ public class AndroidDefaultLogger implements ILogger {
         } else {
             messageBuilder.append(String.format(logMessage, logArgs.toArray()));
         }
-        String writeRawMessage = pError(new LogProxy(level), logTag, message, throwable, 255);
+        String writeRawMessage = pError(new LogProxy(level), logTag, messageBuilder.toString(), throwable, 255);
         if (logConfig.isWriteLog()) {
             Logger.getLoggerWriter().write(level, logTag, writeRawMessage);
         }
     }
 
     private String pMessage(LogProxy logProxy, String tag, String message, int singleLineLength) {
-        Thread thread = Thread.currentThread();
         StringBuilder builder = new StringBuilder();
         builder.append(TOP_BORDER).append(NEWLINE);
-        logProxy.p(tag, TOP_BORDER);
-        String threadInfo = LEFT_BORDER + thread.getName();
-        builder.append(threadInfo).append(NEWLINE);
-        logProxy.p(tag, threadInfo);
-        String middle = MIDDLE_BORDER;
-        builder.append(middle).append(NEWLINE);
-        logProxy.p(tag, middle);
-        if (message.length() <= singleLineLength) {
-            builder.append(LEFT_BORDER).append(message).append(NEWLINE);
-            logProxy.p(tag, LEFT_BORDER + message);
-        } else {
-            int line = message.length() / singleLineLength;
-            if (singleLineLength * line < message.length()) {
-                line += 1;
-            }
-            for (int i = 0; i < line; i++) {
-                int lineMaxLength = i * singleLineLength + 1;
-                String substring = message.substring(i * singleLineLength,
-                        Math.min(lineMaxLength, message.length()));
-                builder.append(LEFT_BORDER).append(substring).append(NEWLINE);
-                logProxy.p(tag, LEFT_BORDER + substring);
-            }
-        }
+        String bodyMessage = pBaseMessage(message, singleLineLength);
+        builder.append(bodyMessage);
         builder.append(BOTTOM_BORDER).append(NEWLINE);
-        logProxy.p(tag, BOTTOM_BORDER);
-        return builder.toString();
+        message = builder.toString();
+        String[] split = message.split(NEWLINE);
+        for (String lineText : split) {
+            logProxy.p(tag, lineText);
+        }
+        return message;
     }
 
     private String pError(LogProxy logProxy, String tag, String message, Throwable throwable, int singleLineLength) {
-        Thread thread = Thread.currentThread();
         StringBuilder builder = new StringBuilder();
         builder.append(TOP_BORDER).append(NEWLINE);
-        String topMessage = TOP_BORDER;
-        logProxy.p(tag, topMessage);
-        String threadInfo = LEFT_BORDER + thread.getName();
-        builder.append(threadInfo).append(NEWLINE);
-        logProxy.p(tag, threadInfo);
-        String middle = MIDDLE_BORDER;
-        builder.append(middle).append(NEWLINE);
-        logProxy.p(tag, middle);
-        if (message.length() <= singleLineLength) {
-            builder.append(LEFT_BORDER).append(message).append(NEWLINE);
-            logProxy.p(tag, LEFT_BORDER + message);
-        } else {
-            int line = message.length() / singleLineLength;
-            if (singleLineLength * line < message.length()) {
-                line += 1;
-            }
-            for (int i = 0; i < line; i++) {
-                int lineMaxLength = i * singleLineLength + 1;
-                String substring = message.substring(i * singleLineLength,
-                        Math.min(lineMaxLength, message.length()));
-                builder.append(LEFT_BORDER).append(substring).append(NEWLINE);
-                logProxy.p(tag, LEFT_BORDER + substring);
-            }
-        }
-
+        String bodyMessage = pBaseMessage(message, singleLineLength);
+        builder.append(bodyMessage);
         if (throwable != null) {
+            builder.append(MIDDLE_BORDER).append(NEWLINE);
             String stackTrace = ThrowableUtils.getStackTrace(throwable);
             String[] split = stackTrace.split(NEWLINE);
             for (String s : split) {
                 builder.append(LEFT_BORDER).append(s).append(NEWLINE);
-                logProxy.p(tag, LEFT_BORDER + s);
             }
         }
-        builder.append(BOTTOM_BORDER);
-        logProxy.p(tag, BOTTOM_BORDER);
+        builder.append(BOTTOM_BORDER).append(NEWLINE);
+        message = builder.toString();
+        String[] split = message.split(NEWLINE);
+        for (String lineText : split) {
+            logProxy.p(tag, lineText);
+        }
+        return message;
+    }
+
+    private String pBaseMessage(String message, int singleLineLength) {
+        StringBuilder builder = new StringBuilder();
+        // 打印线程信息
+        String threadInfo = LEFT_BORDER + Thread.currentThread().getName();
+        builder.append(threadInfo).append(NEWLINE);
+        String middle = MIDDLE_BORDER;
+
+        builder.append(middle).append(NEWLINE);
+        // 打印调用栈信息
+        String appPackageName = AppUtils.getAppPackageName();
+        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
+        for (StackTraceElement stackTraceElement : stackTraceElements) {
+            String stackTraceInfo = stackTraceElement.toString();
+            if (!stackTraceInfo.contains(appPackageName)) {
+                continue;
+            }
+            String stackTraceInfoLine = LEFT_BORDER + stackTraceInfo;
+            builder.append(stackTraceInfoLine).append(NEWLINE);
+        }
+        builder.append(middle).append(NEWLINE);
+        // 打印日志信息
+        if (message.contains(NEWLINE)) {
+            String[] split = message.split(NEWLINE);
+            for (String lineText : split) {
+                builder.append(LEFT_BORDER).append(lineText).append(NEWLINE);
+            }
+        } else if (message.length() <= singleLineLength) {
+            builder.append(LEFT_BORDER).append(message).append(NEWLINE);
+        } else {
+            int line = message.length() / singleLineLength;
+            if (singleLineLength * line < message.length()) {
+                line += 1;
+            }
+            for (int i = 0; i < line; i++) {
+                int lineMaxLength = (i + 1) * singleLineLength;
+                String substring = message.substring(i * singleLineLength,
+                        Math.min(lineMaxLength, message.length()));
+                builder.append(LEFT_BORDER).append(substring).append(NEWLINE);
+            }
+        }
         return builder.toString();
     }
 

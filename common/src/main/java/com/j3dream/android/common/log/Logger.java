@@ -107,7 +107,7 @@ public class Logger {
         getOrCreateDefaultLogger().v(message, args);
     }
 
-    public static void v(String tag, String message, Object... args) {
+    public static void vTag(String tag, String message, Object... args) {
         getOrCreateDefaultLogger().v(tag, message, args);
     }
 
@@ -115,7 +115,7 @@ public class Logger {
         getOrCreateDefaultLogger().d(message, args);
     }
 
-    public static void d(String tag, String message, Object... args) {
+    public static void dTag(String tag, String message, Object... args) {
         getOrCreateDefaultLogger().d(tag, message, args);
     }
 
@@ -123,7 +123,7 @@ public class Logger {
         getOrCreateDefaultLogger().i(message, args);
     }
 
-    public static void i(String tag, String message, Object... args) {
+    public static void iTag(String tag, String message, Object... args) {
         getOrCreateDefaultLogger().i(tag, message, args);
     }
 
@@ -135,7 +135,7 @@ public class Logger {
         getOrCreateDefaultLogger().w(throwable, message, args);
     }
 
-    public static void w(Throwable throwable, String tag, String message, Object... args) {
+    public static void wTag(Throwable throwable, String tag, String message, Object... args) {
         getOrCreateDefaultLogger().w(throwable, tag, message, args);
     }
 
@@ -147,7 +147,7 @@ public class Logger {
         getOrCreateDefaultLogger().e(throwable, message, args);
     }
 
-    public static void e(Throwable throwable, String tag, String message, Object... args) {
+    public static void eTag(Throwable throwable, String tag, String message, Object... args) {
         getOrCreateDefaultLogger().e(throwable, tag, message, args);
     }
 
@@ -159,7 +159,7 @@ public class Logger {
         getOrCreateDefaultLogger().wtf(throwable, message, args);
     }
 
-    public static void wtf(Throwable throwable, String tag, String message, Object... args) {
+    public static void wtfTag(Throwable throwable, String tag, String message, Object... args) {
         getOrCreateDefaultLogger().wtf(throwable, tag, message, args);
     }
 
@@ -183,7 +183,7 @@ public class Logger {
         getOrCreateDefaultLogger().file(message, args);
     }
 
-    public static void file(String tag, String message, Object... args) {
+    public static void fileTag(String tag, String message, Object... args) {
         getOrCreateDefaultLogger().file(tag, message, args);
     }
 }

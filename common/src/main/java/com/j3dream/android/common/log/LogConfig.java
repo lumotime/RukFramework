@@ -25,6 +25,7 @@ public class LogConfig {
     private int writeLevel;
     private boolean writeLog;
     private File writeLogDir;
+    private long writeMaxCacheLength;
     private long writeLogSingleFileLength;
 
     private LogConfig() {
@@ -86,6 +87,14 @@ public class LogConfig {
         this.writeLog = writeLog;
     }
 
+    public long getWriteMaxCacheLength() {
+        return writeMaxCacheLength;
+    }
+
+    private void setWriteMaxCacheLength(long writeMaxCacheLength) {
+        this.writeMaxCacheLength = writeMaxCacheLength;
+    }
+
     public static class Builder {
 
         private String tag = AppUtils.getAppName();
@@ -95,6 +104,7 @@ public class LogConfig {
         private boolean logSwitch = true;
         private File writeLogDir = AndroidFiles.getAppExternalFileDir(DEFAULT_WRITE_LOG_EXTERNAL_DIR_NAME);
         private long writeLogSingleFileLength = 200 * 1024 * 1024;
+        private long writeMaxCacheLength = 514 * 1024;
 
         public Builder setTag(String tag) {
             this.tag = tag;
@@ -136,15 +146,21 @@ public class LogConfig {
             return this;
         }
 
+        public Builder setWriteMaxCacheLength(long writeMaxCacheLength) {
+            this.writeMaxCacheLength = writeMaxCacheLength;
+            return this;
+        }
+
         public LogConfig build() {
             LogConfig logConfig = new LogConfig();
             logConfig.setTag(this.tag);
             logConfig.setWriteLevel(this.writeLevel);
             logConfig.setWriteLogDir(this.writeLogDir);
-            logConfig.setWriteLogSingleFileLength(this.writeLogSingleFileLength);
             logConfig.setLogLevel(this.logLevel);
             logConfig.setLogSwitch(this.logSwitch);
             logConfig.setWriteLog(this.writeLog);
+            logConfig.setWriteMaxCacheLength(this.writeMaxCacheLength);
+            logConfig.setWriteLogSingleFileLength(this.writeLogSingleFileLength);
             return logConfig;
         }
     }

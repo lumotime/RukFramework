@@ -31,38 +31,38 @@ public interface ILogger {
     // log v
     void v(String message, Object... args);
 
-    void v(String tag, String message, Object... args);
+    void vTag(String tag, String message, Object... args);
 
     // log d
     void d(String message, Object... args);
 
-    void d(String tag, String message, Object... args);
+    void dTag(String tag, String message, Object... args);
 
     // log i
     void i(String message, Object... args);
 
-    void i(String tag, String message, Object... args);
+    void iTag(String tag, String message, Object... args);
 
     // log w
     void w(String message, Object... args);
 
     void w(Throwable throwable, String message, Object... args);
 
-    void w(Throwable throwable, String tag, String message, Object... args);
+    void wTag(Throwable throwable, String tag, String message, Object... args);
 
     // log e
     void e(String message, Object... args);
 
     void e(Throwable throwable, String message, Object... args);
 
-    void e(Throwable throwable, String tag, String message, Object... args);
+    void eTag(Throwable throwable, String tag, String message, Object... args);
 
     // log wtf
     void wtf(String message, Object... args);
 
     void wtf(Throwable throwable, String message, Object... args);
 
-    void wtf(Throwable throwable, String tag, String message, Object... args);
+    void wtfTag(Throwable throwable, String tag, String message, Object... args);
 
     // log json
     void json(String jsonMessage);
@@ -77,7 +77,7 @@ public interface ILogger {
     // log file
     void file(String message, Object... args);
 
-    void file(String tag, String message, Object... args);
+    void fileTag(String tag, String message, Object... args);
 
     @IntDef({V, D, I, W, E, A})
     @Retention(RetentionPolicy.SOURCE)
