@@ -159,7 +159,7 @@ public class AndroidDefaultLogger implements ILogger {
         } else {
             messageBuilder.append(String.format(logMessage, logArgs.toArray()));
         }
-        String writeRawMessage = pMessage(new LogProxy(level), logTag, messageBuilder.toString(), 255);
+        String writeRawMessage = pMessage(new LogProxy(level), logTag, messageBuilder.toString(), 1024);
         if (level >= Integer.MAX_VALUE || logConfig.isWriteLog()) {
             Logger.getLoggerWriter().write(level, logTag, writeRawMessage);
         }
@@ -245,7 +245,7 @@ public class AndroidDefaultLogger implements ILogger {
         }
         builder.append(middle).append(NEWLINE);
         // 打印日志信息
-        if (message.contains(NEWLINE)) {
+        if (message.length() <= singleLineLength * 10 && message.contains(NEWLINE)) {
             String[] split = message.split(NEWLINE);
             for (String lineText : split) {
                 builder.append(LEFT_BORDER).append(lineText).append(NEWLINE);
