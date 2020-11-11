@@ -9,6 +9,8 @@ import com.j3dream.core.util.StringUtils;
 import com.j3dream.core.util.ThrowableUtils;
 
 import java.util.ArrayList;
+import java.util.MissingFormatArgumentException;
+import java.util.UnknownFormatConversionException;
 
 /**
  * <p>文件名称: AndroidDefaultLogger </p>
@@ -151,14 +153,24 @@ public class AndroidDefaultLogger implements ILogger {
         StringBuilder messageBuilder = new StringBuilder();
         String logMessage = StringUtils.null2Length0(message);
         ArrayList<Object> logArgs = Lists.newArrayList(args == null ? new String[0] : args);
+
+        boolean isFormat = true;
         if (logMessage.length() > 255) {
+            isFormat = false;
+        } else {
+            try {
+                messageBuilder.append(String.format(logMessage, logArgs.toArray()));
+            } catch (MissingFormatArgumentException | UnknownFormatConversionException ex) {
+                isFormat = false;
+            }
+        }
+        if (!isFormat) {
             for (Object logArg : logArgs) {
                 messageBuilder.append(logArg).append(NEWLINE);
             }
             messageBuilder.append(logMessage);
-        } else {
-            messageBuilder.append(String.format(logMessage, logArgs.toArray()));
         }
+
         String writeRawMessage = pMessage(new LogProxy(level), logTag, messageBuilder.toString(), 1024);
         if (level >= Integer.MAX_VALUE || logConfig.isWriteLog()) {
             Logger.getLoggerWriter().write(level, logTag, writeRawMessage);
@@ -174,13 +186,21 @@ public class AndroidDefaultLogger implements ILogger {
         StringBuilder messageBuilder = new StringBuilder();
         String logMessage = StringUtils.null2Length0(message);
         ArrayList<Object> logArgs = Lists.newArrayList(args == null ? new String[0] : args);
+        boolean isFormat = true;
         if (logMessage.length() > 255) {
+            isFormat = false;
+        } else {
+            try {
+                messageBuilder.append(String.format(logMessage, logArgs.toArray()));
+            } catch (MissingFormatArgumentException | UnknownFormatConversionException ex) {
+                isFormat = false;
+            }
+        }
+        if (!isFormat) {
             for (Object logArg : logArgs) {
                 messageBuilder.append(logArg).append(NEWLINE);
             }
             messageBuilder.append(logMessage);
-        } else {
-            messageBuilder.append(String.format(logMessage, logArgs.toArray()));
         }
         String writeRawMessage = pError(new LogProxy(level), logTag, messageBuilder.toString(), throwable, 255);
         if (logConfig.isWriteLog()) {
