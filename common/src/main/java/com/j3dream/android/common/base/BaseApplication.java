@@ -6,10 +6,10 @@ import androidx.annotation.NonNull;
 
 import com.j3dream.android.common.R;
 import com.j3dream.android.common.interf.ICompatApplication;
+import com.j3dream.android.common.log.Logger;
 import com.j3dream.android.common.util.Utils;
 import com.j3dream.core.util.ObjectUtils;
 import com.j3dream.core.util.executor.ThreadPoolUtils;
-import com.j3dream.core.util.logger.Logger;
 
 import java.util.Collections;
 import java.util.HashMap;
