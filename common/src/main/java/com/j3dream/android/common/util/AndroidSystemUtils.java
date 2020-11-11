@@ -11,13 +11,19 @@ import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.RequiresPermission;
 
 import com.j3dream.android.common.constant.Constants;
+import com.j3dream.android.common.data.CPUInfo;
+import com.j3dream.android.common.data.SysBuildInfo;
+import com.j3dream.android.common.log.Logger;
 import com.j3dream.core.constant.TextConstants;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.lang.reflect.Method;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -113,7 +119,7 @@ public class AndroidSystemUtils {
      *
      * @return 设备序列号
      */
-    @SuppressLint("HardwareIds")
+    @SuppressLint({"HardwareIds", "MissingPermission"})
     @RequiresPermission(READ_PHONE_STATE)
     public static String getSerial() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? Build.getSerial() : Build.SERIAL;
@@ -140,7 +146,7 @@ public class AndroidSystemUtils {
      *
      * @return 当前设备IMSI
      */
-    @SuppressLint("HardwareIds")
+    @SuppressLint({"HardwareIds", "MissingPermission"})
     @RequiresPermission(READ_PHONE_STATE)
     public static String getIMSI() {
         return getTelephonyManager().getSubscriberId();
@@ -151,7 +157,7 @@ public class AndroidSystemUtils {
      *
      * @return 当前设备IMEI
      */
-    @SuppressLint("HardwareIds")
+    @SuppressLint({"HardwareIds", "MissingPermission"})
     @RequiresPermission(READ_PHONE_STATE)
     public static String getIMEI() {
         String imei = TextConstants.EMPTY;
@@ -327,6 +333,122 @@ public class AndroidSystemUtils {
         return Utils.getApp()
                 .getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    }
+
+    /**
+     * 获取系统 Build 信息
+     *
+     * @return 系统 Build 信息
+     */
+    @SuppressLint("MissingPermission")
+    @Nullable
+    public static SysBuildInfo getSystemBuildInfo() {
+        try {
+            SysBuildInfo sysBuildInfo = new SysBuildInfo();
+            sysBuildInfo.setBoard(Build.BOARD);
+            sysBuildInfo.setBootloader(Build.BOOTLOADER);
+            sysBuildInfo.setBrand(Build.BRAND);
+            sysBuildInfo.setDevice(Build.DEVICE);
+            sysBuildInfo.setDisplay(Build.DISPLAY);
+            sysBuildInfo.setFingerprint(Build.FINGERPRINT);
+            sysBuildInfo.setHardware(Build.HARDWARE);
+            sysBuildInfo.setHost(Build.HOST);
+            sysBuildInfo.setId(Build.ID);
+            sysBuildInfo.setManufacturer(Build.MANUFACTURER);
+            sysBuildInfo.setModel(Build.MODEL);
+            sysBuildInfo.setProduct(Build.PRODUCT);
+            sysBuildInfo.setRadio(Build.getRadioVersion());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                try {
+                    sysBuildInfo.setSerial(Build.getSerial());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            } else {
+                sysBuildInfo.setSerial(Build.SERIAL);
+            }
+            sysBuildInfo.setTags(Build.TAGS);
+            sysBuildInfo.setTime(Build.TIME);
+            sysBuildInfo.setType(Build.TYPE);
+            sysBuildInfo.setUser(Build.USER);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                sysBuildInfo.setOsVersion(Build.VERSION.BASE_OS);
+                sysBuildInfo.setPreviewSdkInt(Build.VERSION.PREVIEW_SDK_INT);
+                sysBuildInfo.setSecurityPatch(Build.VERSION.SECURITY_PATCH);
+            }
+            sysBuildInfo.setReleaseVersion(Build.VERSION.RELEASE);
+            sysBuildInfo.setIncremental(Build.VERSION.INCREMENTAL);
+            sysBuildInfo.setSdkInt(Build.VERSION.SDK_INT);
+            return sysBuildInfo;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取系统 CPU 信息
+     *
+     * @return CPU 信息
+     */
+    @Nullable
+    public static CPUInfo getSystemCpuInfo() {
+        try {
+            CPUInfo cpuInfo = new CPUInfo();
+            try {
+                FileReader fr = new FileReader("/proc/cpuinfo");
+                BufferedReader br = new BufferedReader(fr);
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String result = line.toLowerCase();
+                    String[] array = result.split(":\\s+", 2);
+                    Logger.d("CPU INFO: " + result);
+                    //cpu名字
+                    if (array[0].startsWith("model name")) {
+                        cpuInfo.setCpuName(array[1]);
+                    }
+                    //cpu架构
+                    else if (array[0].startsWith("cpu part")) {
+                        String cpuPartInfo = array[1];
+                        cpuInfo.setCpuPart(cpuPartInfo);
+                    }
+                    //cpu品牌
+                    else if (array[0].startsWith("hardware")) {
+                        cpuInfo.setCpuHardware(array[1]);
+                    }
+                    //cpu速度
+                    else if (array[0].startsWith("bogomips")) {
+                        cpuInfo.setBogomips(array[1]);
+                    }
+                    //cpu细节描述
+                    else if (array[0].startsWith("features")) {
+                        cpuInfo.setFeatures(array[1]);
+                    }
+                    //cpu ARM架构
+                    else if (array[0].startsWith("cpu implementer")) {
+                        cpuInfo.setCpuImplementer(array[1]);
+                    }
+                    //cpu 指令集架构
+                    else if (array[0].startsWith("cpu architecture")) {
+                        cpuInfo.setCpuArchitecture(array[1]);
+                    }
+                    //cpu 变化
+                    else if (array[0].startsWith("cpu variant")) {
+                        cpuInfo.setCpuVariant(array[1]);
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            cpuInfo.setCpuFreq(CPUInfoHelper.getCurCpuFreq() + "KHZ");
+            cpuInfo.setCpuMaxFreq(CPUInfoHelper.getMaxCpuFreq() + "KHZ");
+            cpuInfo.setCpuMinFreq(CPUInfoHelper.getMinCpuFreq() + "KHZ");
+            cpuInfo.setCpuCores(CPUInfoHelper.getHeart());
+            cpuInfo.setCpuTemp(CPUInfoHelper.getCpuTemp() + "℃");
+            cpuInfo.setCpuAbi(CPUInfoHelper.putCpuAbi());
+            return cpuInfo;
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     private static TelephonyManager getTelephonyManager() {

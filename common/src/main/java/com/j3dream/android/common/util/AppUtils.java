@@ -20,11 +20,17 @@ import android.os.Build;
 import android.provider.Settings;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import com.j3dream.android.common.constant.Constants;
+import com.j3dream.android.common.data.AppInfo;
 import com.j3dream.android.common.manager.ActivityStackManager;
 import com.j3dream.core.constant.TextConstants;
+
+import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -612,6 +618,100 @@ public class AppUtils {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    /**
+     * 获取已安装的应用列表
+     *
+     * @return 安装的应用列表
+     */
+    @Nullable
+    public static List<PackageInfo> getAppListPackageInfo() {
+        try {
+            List<PackageInfo> installedPackages = Utils.getApp().getPackageManager().getInstalledPackages(0);
+            return installedPackages;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取已安装的应用列表
+     *
+     * @return 安装的应用列表
+     */
+    @Nullable
+    public static List<AppInfo> getAppListInfo() {
+        try {
+            final PackageManager packageManager = Utils.getApp().getPackageManager();
+            List<PackageInfo> installedPackages = packageManager.getInstalledPackages(0);
+            return Lists.transform(installedPackages, new Function<PackageInfo, AppInfo>() {
+                @NullableDecl
+                @Override
+                public AppInfo apply(@NullableDecl PackageInfo packageInfo) {
+                    AppInfo appInfo = new AppInfo();
+                    appInfo.setPackageName(packageInfo.packageName);
+                    appInfo.setAppVersionName(packageInfo.versionName);
+                    appInfo.setAppName(packageInfo.applicationInfo.loadLabel(packageManager).toString());
+                    appInfo.setDescription(packageInfo.applicationInfo.loadDescription(packageManager));
+                    appInfo.setIcon(packageInfo.applicationInfo.loadIcon(packageManager));
+                    appInfo.setTargetSdkVersion(packageInfo.applicationInfo.targetSdkVersion);
+                    appInfo.setLastUpdateTime(packageInfo.lastUpdateTime);
+                    appInfo.setFirstInstallTime(packageInfo.firstInstallTime);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        appInfo.setMinSdkVersion(packageInfo.applicationInfo.minSdkVersion);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        appInfo.setAppVersionCode(packageInfo.getLongVersionCode());
+                    } else {
+                        appInfo.setAppVersionCode(packageInfo.versionCode);
+                    }
+                    appInfo.setPackageSignSHA1(getAppSignatureSHA1(packageInfo.packageName));
+                    appInfo.setPackageSignSHA256(getAppSignatureSHA256(packageInfo.packageName));
+                    appInfo.setSystem(isAppSystem(packageInfo.packageName));
+                    return appInfo;
+                }
+            });
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取当前应用信息
+     *
+     * @return 当前应用信息
+     */
+    @Nullable
+    public static AppInfo getAppInfo() {
+        try {
+            PackageManager packageManager = Utils.getApp().getPackageManager();
+            PackageInfo packageInfo = packageManager
+                    .getPackageInfo(getAppPackageName(), 0);
+            AppInfo appInfo = new AppInfo();
+            appInfo.setPackageName(packageInfo.packageName);
+            appInfo.setAppVersionName(packageInfo.versionName);
+            appInfo.setAppName(packageInfo.applicationInfo.loadLabel(packageManager).toString());
+            appInfo.setIcon(packageInfo.applicationInfo.loadIcon(packageManager));
+            appInfo.setTargetSdkVersion(packageInfo.applicationInfo.targetSdkVersion);
+            appInfo.setLastUpdateTime(packageInfo.lastUpdateTime);
+            appInfo.setFirstInstallTime(packageInfo.firstInstallTime);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                appInfo.setMinSdkVersion(packageInfo.applicationInfo.minSdkVersion);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                appInfo.setAppVersionCode(packageInfo.getLongVersionCode());
+            } else {
+                appInfo.setAppVersionCode(packageInfo.versionCode);
+            }
+            appInfo.setPackageSignSHA1(getAppSignatureSHA1(packageInfo.packageName));
+            appInfo.setPackageSignSHA256(getAppSignatureSHA256(packageInfo.packageName));
+            appInfo.setSystem(isAppSystem(packageInfo.packageName));
+            return appInfo;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static String getAppSignatureHash(final String packageName, final String algorithm) {
