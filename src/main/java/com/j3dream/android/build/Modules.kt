@@ -7,7 +7,8 @@ import com.j3dream.android.build.model.ModuleInfo
  * <p>所属包名: com.j3dream.android.build</p>
  * <p>描述:  </p>
  * <p>feature:
- *
+ *     VERSION_CODE_FORMAT: d_dd_ddd
+ *     VERSION_NAME_FORMAT: d.dd.ddd-s
  * </p>
  * <p>创建时间: 2020/10/23 15:47 </p>
  * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
@@ -18,5 +19,5 @@ object Modules{
     /**
      * example android application build config
      */
-    val M_example = ModuleInfo("com.j3dream.android.example", 1001, "0.01.001")
+    val M_example = ModuleInfo("com.j3dream.android.example", 1, "0.0.1")
 }
