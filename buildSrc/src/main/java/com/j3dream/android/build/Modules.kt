@@ -19,7 +19,7 @@ object Modules{
      * example android application build config
      */
     val M_example = ModuleInfo("com.j3dream.android.example", 1001, "0.01.001")
-    val M_common = ModuleInfo("com.j3dream.android.common", 1003, "0.1.3")
+    val M_common = ModuleInfo("com.j3dream.android.common", 1004, "0.1.4")
     val M_idreader = ModuleInfo("com.j3dream.android.idreader", 1002, "0.1.2")
     val M_arcface = ModuleInfo("com.j3dream.android.arcface", 1002, "0.1.2")
     val M_net = ModuleInfo("com.j3dream.android.net", 1002, "0.1.2")
