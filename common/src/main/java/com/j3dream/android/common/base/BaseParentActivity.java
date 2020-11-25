@@ -46,7 +46,7 @@ import java.util.Map;
  * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
  * @version v1.0
  */
-public abstract class BaseActivity extends AppCompatActivity implements IViewLoading {
+public abstract class BaseParentActivity extends AppCompatActivity implements IViewLoading {
 
     private static final int DEFAULT_REQUEST_PERMISSION_CODE = 11721;
 
@@ -208,7 +208,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IViewLoa
      * @return {true: 符合注册要求, false: 不符合注册要求}
      */
     private boolean isAllBindEventBusRequire() {
-        Class<? extends BaseActivity> clazz = this.getClass();
+        Class<? extends BaseParentActivity> clazz = this.getClass();
         Method[] declaredMethods = clazz.getDeclaredMethods();
         if (!clazz.isAnnotationPresent(BindEventBus.class)) {
             return Boolean.FALSE;

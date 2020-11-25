@@ -45,7 +45,7 @@ import java.util.Map;
  * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
  * @version v1.0
  */
-public abstract class BaseFragment extends Fragment implements IViewLoading {
+public abstract class BaseParentFragment extends Fragment implements IViewLoading {
 
     private static final int DEFAULT_REQUEST_PERMISSION_CODE = 11722;
 
@@ -294,7 +294,7 @@ public abstract class BaseFragment extends Fragment implements IViewLoading {
      * @return {true: 符合注册要求, false: 不符合注册要求}
      */
     private boolean isAllBindEventBusRequire() {
-        Class<? extends BaseFragment> clazz = this.getClass();
+        Class<? extends BaseParentFragment> clazz = this.getClass();
         Method[] declaredMethods = clazz.getDeclaredMethods();
         if (!clazz.isAnnotationPresent(BindEventBus.class)) {
             return Boolean.FALSE;
