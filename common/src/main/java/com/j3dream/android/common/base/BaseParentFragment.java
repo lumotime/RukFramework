@@ -24,6 +24,7 @@ import com.j3dream.android.common.annotate.BindEventBus;
 import com.j3dream.android.common.exception.InitContentViewException;
 import com.j3dream.android.common.interf.IViewLoading;
 import com.j3dream.android.common.interf.OnRequestPermissionsResultListener;
+import com.j3dream.android.common.log.Logger;
 import com.j3dream.android.common.util.DisplayUtils;
 import com.j3dream.android.common.util.IntentUtils;
 import com.j3dream.android.common.util.ToastUtils;
@@ -97,12 +98,25 @@ public abstract class BaseParentFragment extends Fragment implements IViewLoadin
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = getContentViewRes(setLayoutRes(inflater, container, savedInstanceState), inflater, container);
+        try {
+            mContentView = getContentViewRes(setLayoutRes(inflater, container, savedInstanceState), inflater, container);
+        } catch (InitContentViewException ex) {
+            Logger.e(ex.getMessage());
+            // 自身无法进行处理, 交给上层进行处理
+            mContentView = super.onCreateView(inflater, container, savedInstanceState);
+        }
         initConfigs(mContentView);
+        return mContentView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // 初始化数据, 加载数据
         bindViews(mContentView);
         initData();
-        initView(mContentView);
-        return mContentView;
+        initView(view);
     }
 
     @SuppressWarnings("ConstantConditions")
