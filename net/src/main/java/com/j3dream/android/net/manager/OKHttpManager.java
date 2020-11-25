@@ -85,31 +85,35 @@ public class OKHttpManager {
         }
     }
 
-    public OkHttpClient getHttpClick() {
+    public OkHttpClient.Builder getBaseOkHttpClientBuilder() {
         // 获取网络框架的配置信息
         NetConfig netFrameConfig = NetConfigurator.getInstance().getNetConfig();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(netFrameConfig.getConnectTimeout(), netFrameConfig.getTimeUnit());
+        builder.readTimeout(netFrameConfig.getReadTimeout(), netFrameConfig.getTimeUnit());
+        builder.writeTimeout(netFrameConfig.getWriteTimeout(), netFrameConfig.getTimeUnit());
+        if (!ObjectUtils.isEmpty(netFrameConfig.getInterceptors())) {
+            Collection<Interceptor> interceptors = netFrameConfig.getInterceptors().values();
+            for (Interceptor interceptor : interceptors) {
+                builder.addInterceptor(interceptor);
+            }
+        }
+        if (netFrameConfig.getSecurityGrade() > NetConstant.DEFAULT_ALLOW_CONTACT_SECURITY) {
+            builder.addInterceptor(new ContactSecurityInterceptor());
+        }
+        builder.addInterceptor(new NetRequestHeadersInterceptor(netFrameConfig.getHeaders()));
+        if (netFrameConfig.isOpenLog()) {
+            builder.addInterceptor(new HttpLoggingInterceptor(new FrameworkNetLogger())
+                    .setLevel(HttpLoggingInterceptor.Level.BODY));
+        }
+        settingSSL(builder);
+        builder.followRedirects(true);
+        return builder;
+    }
+
+    public OkHttpClient getHttpClick() {
         if (mOkHttpClick == null) {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder();
-            builder.connectTimeout(netFrameConfig.getConnectTimeout(), netFrameConfig.getTimeUnit());
-            builder.readTimeout(netFrameConfig.getReadTimeout(), netFrameConfig.getTimeUnit());
-            builder.writeTimeout(netFrameConfig.getWriteTimeout(), netFrameConfig.getTimeUnit());
-            if (!ObjectUtils.isEmpty(netFrameConfig.getInterceptors())) {
-                Collection<Interceptor> interceptors = netFrameConfig.getInterceptors().values();
-                for (Interceptor interceptor : interceptors) {
-                    builder.addInterceptor(interceptor);
-                }
-            }
-            if (netFrameConfig.getSecurityGrade() > NetConstant.DEFAULT_ALLOW_CONTACT_SECURITY) {
-                builder.addInterceptor(new ContactSecurityInterceptor());
-            }
-            builder.addInterceptor(new NetRequestHeadersInterceptor(netFrameConfig.getHeaders()));
-            if (netFrameConfig.isOpenLog()) {
-                builder.addInterceptor(new HttpLoggingInterceptor(new FrameworkNetLogger())
-                        .setLevel(HttpLoggingInterceptor.Level.BODY));
-            }
-            settingSSL(builder);
-            builder.followRedirects(true);
-            mOkHttpClick = builder.build();
+            mOkHttpClick = getBaseOkHttpClientBuilder().build();
         }
         return mOkHttpClick;
     }
