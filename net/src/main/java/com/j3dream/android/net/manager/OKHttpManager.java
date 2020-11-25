@@ -36,13 +36,53 @@ import okhttp3.logging.HttpLoggingInterceptor;
  */
 public class OKHttpManager {
 
-    private static OkHttpClient mOkHttpClick;
+    private static OKHttpManager sOkHttpManager;
+    private OkHttpClient mOkHttpClick;
 
     private OKHttpManager() {
+        init();
     }
 
     public static OKHttpManager getInstance() {
-        return OKHttpManagerHolder.instance;
+        if (sOkHttpManager == null) {
+            synchronized (OKHttpManager.class) {
+                if (sOkHttpManager == null) {
+                    sOkHttpManager = new OKHttpManager();
+                }
+            }
+        }
+        return sOkHttpManager;
+    }
+
+    /**
+     * 获取 support base okhttpclient builder
+     *
+     * @return base okhttpclient builder
+     */
+    public static OkHttpClient.Builder getBaseOkHttpClientBuilder() {
+        // 获取网络框架的配置信息
+        NetConfig netFrameConfig = NetConfigurator.getInstance().getNetConfig();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(netFrameConfig.getConnectTimeout(), netFrameConfig.getTimeUnit());
+        builder.readTimeout(netFrameConfig.getReadTimeout(), netFrameConfig.getTimeUnit());
+        builder.writeTimeout(netFrameConfig.getWriteTimeout(), netFrameConfig.getTimeUnit());
+        if (!ObjectUtils.isEmpty(netFrameConfig.getInterceptors())) {
+            Collection<Interceptor> interceptors = netFrameConfig.getInterceptors().values();
+            for (Interceptor interceptor : interceptors) {
+                builder.addInterceptor(interceptor);
+            }
+        }
+        if (netFrameConfig.getSecurityGrade() > NetConstant.DEFAULT_ALLOW_CONTACT_SECURITY) {
+            builder.addInterceptor(new ContactSecurityInterceptor());
+        }
+        builder.addInterceptor(new NetRequestHeadersInterceptor(netFrameConfig.getHeaders()));
+        if (netFrameConfig.isOpenLog()) {
+            builder.addInterceptor(new HttpLoggingInterceptor(new FrameworkNetLogger())
+                    .setLevel(HttpLoggingInterceptor.Level.BODY));
+        }
+        settingSSL(builder);
+        builder.followRedirects(true);
+        return builder;
     }
 
     /**
@@ -50,7 +90,7 @@ public class OKHttpManager {
      *
      * @param builder OKHttpClient构造器
      */
-    private void settingSSL(OkHttpClient.Builder builder) {
+    private static void settingSSL(OkHttpClient.Builder builder) {
         // 忽略证书验证
         X509TrustManager xtm = new X509TrustManager() {
             @Override
@@ -85,40 +125,18 @@ public class OKHttpManager {
         }
     }
 
-    public OkHttpClient.Builder getBaseOkHttpClientBuilder() {
-        // 获取网络框架的配置信息
-        NetConfig netFrameConfig = NetConfigurator.getInstance().getNetConfig();
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(netFrameConfig.getConnectTimeout(), netFrameConfig.getTimeUnit());
-        builder.readTimeout(netFrameConfig.getReadTimeout(), netFrameConfig.getTimeUnit());
-        builder.writeTimeout(netFrameConfig.getWriteTimeout(), netFrameConfig.getTimeUnit());
-        if (!ObjectUtils.isEmpty(netFrameConfig.getInterceptors())) {
-            Collection<Interceptor> interceptors = netFrameConfig.getInterceptors().values();
-            for (Interceptor interceptor : interceptors) {
-                builder.addInterceptor(interceptor);
-            }
-        }
-        if (netFrameConfig.getSecurityGrade() > NetConstant.DEFAULT_ALLOW_CONTACT_SECURITY) {
-            builder.addInterceptor(new ContactSecurityInterceptor());
-        }
-        builder.addInterceptor(new NetRequestHeadersInterceptor(netFrameConfig.getHeaders()));
-        if (netFrameConfig.isOpenLog()) {
-            builder.addInterceptor(new HttpLoggingInterceptor(new FrameworkNetLogger())
-                    .setLevel(HttpLoggingInterceptor.Level.BODY));
-        }
-        settingSSL(builder);
-        builder.followRedirects(true);
-        return builder;
+    private void init() {
     }
 
+    /**
+     * 获取全局唯一的 OkHttpClient 实例
+     *
+     * @return 全局唯一的 OkHttpClient 实例
+     */
     public OkHttpClient getHttpClick() {
         if (mOkHttpClick == null) {
             mOkHttpClick = getBaseOkHttpClientBuilder().build();
         }
         return mOkHttpClick;
-    }
-
-    private static class OKHttpManagerHolder {
-        static final OKHttpManager instance = new OKHttpManager();
     }
 }

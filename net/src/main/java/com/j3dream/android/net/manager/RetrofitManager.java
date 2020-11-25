@@ -29,17 +29,73 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitManager {
 
-    private static Retrofit mRetrofit;
+    private static RetrofitManager sRetrofitManager;
+    private Retrofit mRetrofit;
 
     private RetrofitManager() {
     }
 
     public static RetrofitManager getInstance() {
-        return RetrofitManagerHolder.instance;
+        if (sRetrofitManager == null) {
+            synchronized (RetrofitManager.class) {
+                if (sRetrofitManager == null) {
+                    sRetrofitManager = new RetrofitManager();
+                }
+            }
+        }
+        return sRetrofitManager;
+    }
+
+    /**
+     * 获取 support base retrofit builder
+     *
+     * @return base retrofit builder
+     */
+    public static Retrofit.Builder getBaseRetrofitBuilder() {
+        return getBaseRetrofitBuilder(null);
+    }
+
+    /**
+     * 获取 support base retrofit builder
+     *
+     * @param gson 支持 gson 实例切换
+     * @return base retrofit builder
+     */
+    public static Retrofit.Builder getBaseRetrofitBuilder(Gson gson) {
+        NetConfig netFrameConfig = NetConfigurator.getInstance().getNetConfig();
+        if (netFrameConfig == null || StringUtils.isEmpty(netFrameConfig.getServiceHost())) {
+            throw new NetHandleException("please check init network frame configs or add service host is added!!!");
+        }
+        return createRetrofitBuilder(netFrameConfig, gson);
     }
 
     public Retrofit newRetrofit() {
         return newRetrofit(true);
+    }
+
+    /**
+     * 创建一个 Retrofit
+     *
+     * @param netConfig
+     * @return
+     */
+    private static Retrofit.Builder createRetrofitBuilder(NetConfig netConfig, Gson gson) {
+        Retrofit.Builder builder = new Retrofit.Builder();
+        builder.baseUrl(netConfig.getServiceHost());
+        builder.addConverterFactory(GsonConverterFactory.create(gson == null ? createGson() : gson));
+        builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+        builder.client(OKHttpManager.getInstance().getHttpClick());
+        return builder;
+    }
+
+    public Retrofit getDefaultRetrofit() {
+        return mRetrofit;
+    }
+
+    private static Gson createGson() {
+        return new GsonBuilder().setPrettyPrinting()
+                .registerTypeAdapter(Calendar.class, new LocalDateTimeAdapter())
+                .create();
     }
 
     /**
@@ -55,37 +111,8 @@ public class RetrofitManager {
         if (mRetrofit == null || (isForceRefreshHost &&
                 !StringUtils.null2Length0(Uri.parse(netFrameConfig.getServiceHost()).getHost())
                         .equals(ObjectUtils.toString(mRetrofit.baseUrl().host())))) {
-            mRetrofit = createRetrofit(netFrameConfig);
+            mRetrofit = createRetrofitBuilder(netFrameConfig, null).build();
         }
         return mRetrofit;
-    }
-
-    public Retrofit getDefaultRetrofit() {
-        return mRetrofit;
-    }
-
-    /**
-     * 创建一个 Retrofit
-     *
-     * @param netConfig
-     * @return
-     */
-    private Retrofit createRetrofit(NetConfig netConfig) {
-        Retrofit.Builder builder = new Retrofit.Builder();
-        builder.baseUrl(netConfig.getServiceHost());
-        builder.addConverterFactory(GsonConverterFactory.create(createGson()));
-        builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
-        builder.client(OKHttpManager.getInstance().getHttpClick());
-        return builder.build();
-    }
-
-    private Gson createGson() {
-        return new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapter(Calendar.class, new LocalDateTimeAdapter())
-                .create();
-    }
-
-    private static final class RetrofitManagerHolder {
-        static RetrofitManager instance = new RetrofitManager();
     }
 }
