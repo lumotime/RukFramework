@@ -28,6 +28,7 @@ public class DynamicTimeoutInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
+        Chain newChain = chain;
         Request request = chain.request();
         Invocation invocation = request.tag(Invocation.class);
         final Method method = invocation != null ? invocation.method() : null;
@@ -37,21 +38,22 @@ public class DynamicTimeoutInterceptor implements Interceptor {
                 netConfig = NetConfigurator.getInstance().getNetConfig();
             }
             if (netConfig.isTimeout()) {
-                chain.withConnectTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit());
-                chain.withWriteTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit());
-                chain.withReadTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit());
+                newChain = newChain
+                        .withConnectTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit())
+                        .withWriteTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit())
+                        .withReadTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit());
             }
-            return chain.proceed(request);
+            return newChain.proceed(request);
         }
         if (dynamicTimeout.connectTimeout() > 0) {
-            chain.withConnectTimeout(dynamicTimeout.connectTimeout(), dynamicTimeout.unit());
+            newChain = newChain.withConnectTimeout(dynamicTimeout.connectTimeout(), dynamicTimeout.unit());
         }
         if (dynamicTimeout.readTimeout() > 0) {
-            chain.withReadTimeout(dynamicTimeout.readTimeout(), dynamicTimeout.unit());
+            newChain = newChain.withReadTimeout(dynamicTimeout.readTimeout(), dynamicTimeout.unit());
         }
         if (dynamicTimeout.writeTimeout() > 0) {
-            chain.withWriteTimeout(dynamicTimeout.connectTimeout(), dynamicTimeout.unit());
+            newChain = newChain.withWriteTimeout(dynamicTimeout.connectTimeout(), dynamicTimeout.unit());
         }
-        return chain.proceed(request);
+        return newChain.proceed(request);
     }
 }
