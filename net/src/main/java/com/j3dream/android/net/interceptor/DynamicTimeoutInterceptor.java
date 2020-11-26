@@ -1,6 +1,8 @@
 package com.j3dream.android.net.interceptor;
 
+import com.j3dream.android.net.NetConfigurator;
 import com.j3dream.android.net.annotation.DynamicTimeout;
+import com.j3dream.android.net.config.NetConfig;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -22,6 +24,8 @@ import retrofit2.Invocation;
  */
 public class DynamicTimeoutInterceptor implements Interceptor {
 
+    private NetConfig netConfig;
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
@@ -29,6 +33,14 @@ public class DynamicTimeoutInterceptor implements Interceptor {
         final Method method = invocation != null ? invocation.method() : null;
         final DynamicTimeout dynamicTimeout = method != null ? method.getAnnotation(DynamicTimeout.class) : null;
         if (dynamicTimeout == null) {
+            if (netConfig == null) {
+                netConfig = NetConfigurator.getInstance().getNetConfig();
+            }
+            if (netConfig.isTimeout()) {
+                chain.withConnectTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit());
+                chain.withWriteTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit());
+                chain.withReadTimeout(netConfig.getConnectTimeout(), netConfig.getTimeUnit());
+            }
             return chain.proceed(request);
         }
         if (dynamicTimeout.connectTimeout() > 0) {

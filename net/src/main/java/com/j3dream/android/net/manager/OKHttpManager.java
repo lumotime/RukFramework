@@ -64,9 +64,6 @@ public class OKHttpManager {
         // 获取网络框架的配置信息
         NetConfig netFrameConfig = NetConfigurator.getInstance().getNetConfig();
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(netFrameConfig.getConnectTimeout(), netFrameConfig.getTimeUnit());
-        builder.readTimeout(netFrameConfig.getReadTimeout(), netFrameConfig.getTimeUnit());
-        builder.writeTimeout(netFrameConfig.getWriteTimeout(), netFrameConfig.getTimeUnit());
         if (!ObjectUtils.isEmpty(netFrameConfig.getInterceptors())) {
             Collection<Interceptor> interceptors = netFrameConfig.getInterceptors().values();
             for (Interceptor interceptor : interceptors) {

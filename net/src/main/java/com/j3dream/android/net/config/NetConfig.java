@@ -45,15 +45,15 @@ public class NetConfig {
     /**
      * 链接超时时间
      */
-    private long connectTimeout;
+    private int connectTimeout;
     /**
      * 读取超时时间
      */
-    private long readTimeout;
+    private int readTimeout;
     /**
      * 写入超时时间
      */
-    private long writeTimeout;
+    private int writeTimeout;
     /**
      * 服务的host
      */
@@ -62,6 +62,8 @@ public class NetConfig {
      * 默认加密Key的名称
      */
     private String encryptKeyName = NetConstant.DEFAULT_ENCRYPT_KEY_NAME;
+
+    private boolean timeout;
 
     private Map<String, Interceptor> interceptors;
 
@@ -113,15 +115,15 @@ public class NetConfig {
         return timeUnit;
     }
 
-    public long getConnectTimeout() {
+    public int getConnectTimeout() {
         return connectTimeout;
     }
 
-    public long getReadTimeout() {
+    public int getReadTimeout() {
         return readTimeout;
     }
 
-    public long getWriteTimeout() {
+    public int getWriteTimeout() {
         return writeTimeout;
     }
 
@@ -133,20 +135,25 @@ public class NetConfig {
         return respSuccessCode;
     }
 
+    public boolean isTimeout() {
+        return timeout;
+    }
+
     public static class Builder {
         private boolean openLog = AppUtils.isAppDebug();
         private String loggerTag = NetConstant.TAG_NET_FRAME_LOGGER;
         private int securityGrade = 0;
         private Map<String, String> headers = new HashMap<>();
         private TimeUnit timeUnit = TimeUnit.SECONDS;
-        private long connectTimeout = 30;
-        private long readTimeout = 60;
-        private long writeTimeout = 60;
+        private int connectTimeout = 30;
+        private int readTimeout = 60;
+        private int writeTimeout = 60;
         private String serviceHost;
         private String encryptKeyName = NetConstant.DEFAULT_ENCRYPT_KEY_NAME;
         private SecurityKey securityKey;
         private int respSuccessCode;
         private Map<String, Interceptor> interceptors = Maps.newHashMap();
+        private boolean timeout = false;
 
         public Builder setOpenLog(boolean openLog) {
             this.openLog = openLog;
@@ -178,17 +185,17 @@ public class NetConfig {
             return this;
         }
 
-        public Builder setConnectTimeout(long connectTimeout) {
+        public Builder setConnectTimeout(int connectTimeout) {
             this.connectTimeout = connectTimeout;
             return this;
         }
 
-        public Builder setReadTimeout(long readTimeout) {
+        public Builder setReadTimeout(int readTimeout) {
             this.readTimeout = readTimeout;
             return this;
         }
 
-        public Builder setWriteTimeout(long writeTimeout) {
+        public Builder setWriteTimeout(int writeTimeout) {
             this.writeTimeout = writeTimeout;
             return this;
         }
@@ -213,6 +220,11 @@ public class NetConfig {
             return this;
         }
 
+        public Builder setTimeout(boolean timeout) {
+            this.timeout = timeout;
+            return this;
+        }
+
         public NetConfig build() {
             NetConfig config = new NetConfig();
             config.openLog = this.openLog;
@@ -228,6 +240,7 @@ public class NetConfig {
             config.securityKey = this.securityKey;
             config.respSuccessCode = this.respSuccessCode;
             config.interceptors = this.interceptors;
+            config.timeout = this.timeout;
             return config;
         }
     }
