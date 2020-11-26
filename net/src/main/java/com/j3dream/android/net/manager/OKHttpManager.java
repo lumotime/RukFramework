@@ -4,6 +4,7 @@ import com.j3dream.android.net.NetConfigurator;
 import com.j3dream.android.net.NetConstant;
 import com.j3dream.android.net.config.NetConfig;
 import com.j3dream.android.net.interceptor.ContactSecurityInterceptor;
+import com.j3dream.android.net.interceptor.DynamicTimeoutInterceptor;
 import com.j3dream.android.net.interceptor.NetRequestHeadersInterceptor;
 import com.j3dream.android.net.logger.FrameworkNetLogger;
 import com.j3dream.core.util.ObjectUtils;
@@ -80,6 +81,7 @@ public class OKHttpManager {
             builder.addInterceptor(new HttpLoggingInterceptor(new FrameworkNetLogger())
                     .setLevel(HttpLoggingInterceptor.Level.BODY));
         }
+        builder.addInterceptor(new DynamicTimeoutInterceptor());
         settingSSL(builder);
         builder.followRedirects(true);
         return builder;
