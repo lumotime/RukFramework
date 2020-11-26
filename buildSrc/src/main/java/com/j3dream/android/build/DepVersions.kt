@@ -26,7 +26,7 @@ internal object DepVersions {
     const val eventbus = "3.1.1"
     const val rxjava = "2.2.11"
     const val rxandroid = "2.1.1"
-    const val retrofit = "2.3.0"
+    const val retrofit = "2.9.0"
     const val retrofit_convert_rxjava = retrofit
     const val retrofit_convert_gson = retrofit
     const val stetho = "1.5.1"
