@@ -39,7 +39,7 @@ internal object DepVersions {
 
     object Framework {
         const val core = "0.1.2"
-        const val common_android = "0.1.5@aar"
+        const val common_android = "0.1.7@aar"
         const val idreader_android = "0.1.2@aar"
         const val arcface_android = "0.1.2@aar"
         const val net_android = "0.1.6@aar"
