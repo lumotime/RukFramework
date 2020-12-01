@@ -24,6 +24,7 @@ public abstract class BaseMvpActivity extends BaseParentActivity implements IBas
 
     @Override
     protected void initConfigs() {
+        super.initConfigs();
         mProxyActivity = createProxyActivity();
         mProxyActivity.bindPresenter();
     }

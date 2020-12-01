@@ -87,7 +87,9 @@ public abstract class BaseParentFragment extends Fragment implements IViewLoadin
     /**
      * 初始化额外配置
      */
-    protected abstract void initConfigs(@NonNull View rootView);
+    protected void initConfigs(@NonNull View rootView){
+        bindEventBus();
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {

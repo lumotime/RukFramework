@@ -28,6 +28,7 @@ public abstract class BaseMvpFragment extends BaseParentFragment implements IBas
 
     @Override
     protected void initConfigs(@NonNull View rootView) {
+        super.initConfigs(rootView);
         mProxyFragment = createProxyFragment();
         mProxyFragment.bindPresenter();
     }
