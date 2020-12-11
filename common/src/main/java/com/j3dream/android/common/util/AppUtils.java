@@ -35,7 +35,6 @@ import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.j3dream.android.common.constant.Constants.PACKAGE;
@@ -329,11 +328,7 @@ public class AppUtils {
      * 推出杀死应用
      */
     public static void exitApp() {
-        LinkedList<Activity> activityList = ActivityStackManager.getInstance().getActivityStack();
-        for (int i = activityList.size() - 1; i >= 0; --i) {
-            Activity activity = activityList.get(i);
-            activity.finish();
-        }
+        ActivityStackManager.finishAllActivities();
         System.exit(0);
     }
 

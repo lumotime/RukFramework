@@ -6,6 +6,8 @@ import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import com.j3dream.android.common.constant.Constants;
 import com.j3dream.android.common.manager.ActivityStackManager;
 
@@ -28,7 +30,9 @@ public class Utils {
      * 全局持有的全局应用上下文
      */
     @SuppressLint("StaticFieldLeak")
-    private static Application sApplication;
+    private volatile static Application sApplication;
+    private static ActivityStackManager.ActivityCallbacks ACTIVITY_CALLBACK
+            = new ActivityStackManager.ActivityCallbacks();
 
     private Utils() {
         throw new UnsupportedOperationException(Constants.NOT_SUPPORT_CREATE_INSTANTIATE);
@@ -49,12 +53,12 @@ public class Utils {
             } else {
                 sApplication = app;
             }
-            ActivityStackManager.getInstance().registerActivityStackManager(sApplication);
+            sApplication.registerActivityLifecycleCallbacks(ACTIVITY_CALLBACK);
         } else {
             if (app != null && app.getClass() != sApplication.getClass()) {
-                ActivityStackManager.getInstance().unregisterActivityStackManager(sApplication);
+                sApplication.unregisterActivityLifecycleCallbacks(ACTIVITY_CALLBACK);
                 sApplication = app;
-                ActivityStackManager.getInstance().registerActivityStackManager(sApplication);
+                sApplication.registerActivityLifecycleCallbacks(ACTIVITY_CALLBACK);
             }
         }
     }
@@ -73,9 +77,9 @@ public class Utils {
         return app;
     }
 
-    static Context getTopActivityOrApp() {
+    public static Context getTopActivityOrApp() {
         if (isAppForeground()) {
-            Activity topActivity = ActivityStackManager.getInstance().getTopActivity();
+            Activity topActivity = ACTIVITY_CALLBACK.getTopActivity();
             return topActivity == null ? Utils.getApp() : topActivity;
         } else {
             return Utils.getApp();
@@ -97,6 +101,10 @@ public class Utils {
         return false;
     }
 
+    public static ActivityStackManager.ActivityCallbacks getActivityCallbacks() {
+        return ACTIVITY_CALLBACK;
+    }
+
     /**
      * @return 全局上下文
      * @see 'https://github.com/Blankj/AndroidUtilCode/blob/master/lib/utilcode/src/main/java/com/blankj/utilcode/util/Utils.java'
@@ -115,5 +123,14 @@ public class Utils {
             ex.printStackTrace();
         }
         throw new NullPointerException("u should init first");
+    }
+
+    public static List<Activity> getActivityList() {
+        return ACTIVITY_CALLBACK.getActivityList();
+    }
+
+    @Nullable
+    public static Activity getTopActivity() {
+        return ACTIVITY_CALLBACK.getTopActivity();
     }
 }
