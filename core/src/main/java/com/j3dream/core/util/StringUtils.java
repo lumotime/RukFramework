@@ -238,25 +238,12 @@ public class StringUtils implements TextConstants {
     /**
      * 组合字符串数组, 使用connector进行连接
      *
-     * @param source       字符串列表
-     * @param connector    连字符
-     * @param isHeaderAdd  头部是否增加连字符
-     * @param isEndReplace 尾部是否替换
+     * @param source    字符串列表
+     * @param connector 连字符
      * @return string
      */
-    public static String joinArray(String[] source, String connector, boolean isHeaderAdd, boolean isEndReplace) {
-        StringBuilder newBuilder = new StringBuilder();
-        if (isHeaderAdd) {
-            newBuilder.append(connector);
-        }
-        for (int i = 0; i < source.length; i++) {
-            newBuilder.append(source[i]);
-            if (i <= source.length - 1 && isEndReplace) {
-                continue;
-            }
-            newBuilder.append(connector);
-        }
-        return newBuilder.toString();
+    public static String joinArray(String[] source, String connector) {
+        return String.join(connector, source);
     }
 
     /**
