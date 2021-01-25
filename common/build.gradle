@@ -7,7 +7,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.panpf.bintray-publish'
 
 // 当前模块配置详情
-def module_artifactId = "android-common"
+def module_artifactId = "common"
 def module_version = Modules.M_common.versionName
 
 android {
@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    api(Dependencies.Framework.core)
+    api(project("${LIB_CORE}"))
     api(Dependencies.guava)
     api(Dependencies.kotlin_stdlib)
     api(Dependencies.AndroidX.appcompat)

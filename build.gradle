@@ -5,6 +5,7 @@ buildscript {
     ext.bintray_userOrg = "j3dream"
     ext.bintray_groupId = "com.j3dream.android"
     ext.bintray_website = "https://blog.j3dream.top/"
+    ext.LIB_CORE = ":core"
 
     repositories {
         google()
