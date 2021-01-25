@@ -37,7 +37,7 @@ import io.reactivex.schedulers.Schedulers;
  * <p>描述: 异步数据库变换器 </p>
  * <p>创建时间: 2020/5/19 13:47 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public final class RxTransformer {

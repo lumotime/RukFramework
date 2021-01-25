@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
  * <p>描述: 基础的控制层, 供其他实现的引用 </p>
  * <p>创建时间: 2020/4/24 11:10 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public abstract class BasePresenter<V extends IBaseView, M extends BaseModel> implements IBasePresenter {

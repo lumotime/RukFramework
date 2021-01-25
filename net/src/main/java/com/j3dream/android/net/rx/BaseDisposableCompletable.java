@@ -10,7 +10,7 @@ import io.reactivex.observers.DisposableCompletableObserver;
  * <p>描述: 基础数据库RxJava Completable订阅者 </p>
  * <p>创建时间: 2020/5/19 11:28 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public abstract class BaseDisposableCompletable extends DisposableCompletableObserver {

@@ -14,7 +14,7 @@ import io.reactivex.functions.Function;
  * <p>描述: 网络响应实体转化数据方法 </p>
  * <p>创建时间: 2020/4/21 09:50 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class NetRespModConvertedFunction<R, T extends NetRespMod<R>> implements Function<T, Observable<R>> {

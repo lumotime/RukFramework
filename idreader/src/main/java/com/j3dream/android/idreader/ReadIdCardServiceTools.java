@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
  * <p>描述: 读卡驱动服务工具类 </p>
  * <p>创建时间: 2020/5/9 10:24 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class ReadIdCardServiceTools {

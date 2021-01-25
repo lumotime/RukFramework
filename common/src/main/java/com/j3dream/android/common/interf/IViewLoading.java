@@ -6,7 +6,7 @@ package com.j3dream.android.common.interf;
  * <p>描述: 视图加载接口 </p>
  * <p>创建时间: 2020/3/16 11:34 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public interface IViewLoading {

@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
  * <p></p>
  * <p>创建时间: 2020/11/25 09:06 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public abstract class BasePageFragment extends BaseParentFragment implements BasePageOwner {

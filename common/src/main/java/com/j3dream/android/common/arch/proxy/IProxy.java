@@ -6,7 +6,7 @@ package com.j3dream.android.common.arch.proxy;
  * <p>描述: 代理活动中 Presenter 绑定解绑操作 </p>
  * <p>创建时间: 2020/4/24 11:15 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public interface IProxy {

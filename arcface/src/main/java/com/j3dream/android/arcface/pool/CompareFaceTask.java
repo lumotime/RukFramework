@@ -26,7 +26,7 @@ import java.util.concurrent.Callable;
  * </p>
  * <p>创建时间: 2020/6/29 15:39 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class CompareFaceTask implements Callable<List<CorrectUserInfo>> {

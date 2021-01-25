@@ -1,9 +1,9 @@
 apply plugin: 'java-library'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.github.panpf.bintray-publish'
 
 // 当前模块配置详情
 def module_artifactId = "core"
-def module_version = "0.0.1"
+def module_version = "0.0.2"
 
 // 配置 java 环境
 sourceCompatibility = "1.7"
@@ -15,7 +15,7 @@ dependencies {
     api("commons-codec:commons-codec:1.15")
 }
 
-// bintray 配置
+//bintray 配置
 publish {
     userOrg = "${bintray_userOrg}"
     groupId = "${bintray_groupId}"

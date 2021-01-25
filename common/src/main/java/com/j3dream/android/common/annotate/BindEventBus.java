@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * <p>描述: 绑定事件分发库注解 </p>
  * <p>创建时间: 2020/3/16 11:25 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 @Target(ElementType.TYPE)

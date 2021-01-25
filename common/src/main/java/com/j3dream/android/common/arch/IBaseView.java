@@ -8,7 +8,7 @@ import com.j3dream.android.common.interf.IViewLoading;
  * <p>描述: MVP View层接口 </p>
  * <p>创建时间: 2020/4/24 11:06 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public interface IBaseView extends IViewLoading {

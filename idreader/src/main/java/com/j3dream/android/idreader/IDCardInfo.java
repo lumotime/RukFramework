@@ -10,7 +10,7 @@ import java.io.Serializable;
  * <p>描述: 身份证数据模型 </p>
  * <p>创建时间: 2020/5/9 10:13 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class IDCardInfo implements Serializable {

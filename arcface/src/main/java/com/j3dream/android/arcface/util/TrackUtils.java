@@ -15,7 +15,7 @@ import java.util.List;
  * </p>
  * <p>创建时间: 2020/9/13 19:13 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class TrackUtils {

@@ -20,7 +20,7 @@ import com.j3dream.core.util.TimeDateUtils;
  * <p>描述: 身份证读卡服务读取结果的广播接收器, 用于接受读卡的相关广播 </p>
  * <p>创建时间: 2020-02-04 11:56 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class ReadIdCardResultReceiver extends BroadcastReceiver implements ReadCardConstant {

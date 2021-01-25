@@ -40,7 +40,7 @@ import static com.j3dream.android.common.util.AppUtils.isAppForeground;
  * <p>创建时间: 2020-02-18 11:44 </p>
  * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class ActivityStackManager {
@@ -528,6 +528,7 @@ public class ActivityStackManager {
      *                  incoming activity.
      * @param exitAnim  A resource ID of the animation resource to use for the
      *                  outgoing activity.
+     * @param activity  activity
      */
     public static void startActivity(@NonNull final Bundle extras,
                                      @NonNull final Activity activity,
@@ -1271,6 +1272,7 @@ public class ActivityStackManager {
      * @param activity      The activity.
      * @param isIncludeSelf True to include the activity, false otherwise.
      * @param isLoadAnim    True to use animation for the outgoing activity, false otherwise.
+     * @return result
      */
     public static boolean finishToActivity(@NonNull final Activity activity,
                                            final boolean isIncludeSelf,
@@ -1298,6 +1300,7 @@ public class ActivityStackManager {
      *                      incoming activity.
      * @param exitAnim      A resource ID of the animation resource to use for the
      *                      outgoing activity.
+     * @return execute result
      */
     public static boolean finishToActivity(@NonNull final Activity activity,
                                            final boolean isIncludeSelf,
@@ -1322,6 +1325,7 @@ public class ActivityStackManager {
      *
      * @param clz           The activity class.
      * @param isIncludeSelf True to include the activity, false otherwise.
+     * @return execute result
      */
     public static boolean finishToActivity(@NonNull final Class<? extends Activity> clz,
                                            final boolean isIncludeSelf) {
@@ -1334,6 +1338,7 @@ public class ActivityStackManager {
      * @param clz           The activity class.
      * @param isIncludeSelf True to include the activity, false otherwise.
      * @param isLoadAnim    True to use animation for the outgoing activity, false otherwise.
+     * @return execute result
      */
     public static boolean finishToActivity(@NonNull final Class<? extends Activity> clz,
                                            final boolean isIncludeSelf,
@@ -1361,6 +1366,7 @@ public class ActivityStackManager {
      *                      incoming activity.
      * @param exitAnim      A resource ID of the animation resource to use for the
      *                      outgoing activity.
+     * @return execute result
      */
     public static boolean finishToActivity(@NonNull final Class<? extends Activity> clz,
                                            final boolean isIncludeSelf,

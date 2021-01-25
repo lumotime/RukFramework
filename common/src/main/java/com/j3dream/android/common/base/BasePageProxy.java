@@ -9,8 +9,7 @@ import androidx.fragment.app.Fragment;
 /**
  * Fragment快速实现沉浸式的代理类
  *
- * @author geyifeng
- * @date 2018/11/15 12:53 PM
+ * @author geyifeng 2018/11/15 12:53 PM
  */
 public class BasePageProxy {
     /**

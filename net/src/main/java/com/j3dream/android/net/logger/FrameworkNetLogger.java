@@ -16,7 +16,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  * <p>创建时间: 2020-02-09 17:02 </p>
  * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class FrameworkNetLogger implements HttpLoggingInterceptor.Logger {

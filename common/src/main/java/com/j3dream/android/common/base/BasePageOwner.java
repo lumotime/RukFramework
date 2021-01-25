@@ -4,8 +4,7 @@ package com.j3dream.android.common.base;
  * ImmersionBar接口
  * The interface Immersion owner.
  *
- * @author geyifeng
- * @date 2018 /11/15 12:52 PM
+ * @author geyifeng 2018 /11/15 12:52 PM
  */
 public interface BasePageOwner {
 

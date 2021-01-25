@@ -16,7 +16,7 @@ import java.lang.annotation.RetentionPolicy;
  * </p>
  * <p>创建时间: 2020/7/10 14:19 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public interface ILogger {

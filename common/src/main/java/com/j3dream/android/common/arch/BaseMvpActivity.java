@@ -13,7 +13,7 @@ import com.j3dream.core.util.ObjectUtils;
  * <p>描述: 基础的MVP架构活动 </p>
  * <p>创建时间: 2020/4/24 09:57 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public abstract class BaseMvpActivity extends BaseParentActivity implements IBaseView {

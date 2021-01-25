@@ -3,6 +3,7 @@ package com.j3dream.android.idreader;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -12,7 +13,6 @@ import com.j3dream.android.idreader.util.DriverExtractHelper;
 import com.j3dream.core.util.ObjectUtils;
 import com.j3dream.core.util.StringUtils;
 import com.j3dream.core.util.executor.ThreadPoolUtils;
-import com.j3dream.core.util.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +24,12 @@ import java.util.Set;
  * <p>描述: 读卡启动器, 主要用于开启读卡服务的相关应用 </p>
  * <p>创建时间: 2020-02-10 19:16 </p>
  *
- * @author <a href="mail to: cnrivkaer@outlook.com" rel="nofollow">lumo</a>
+ * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
  */
 public class ReadCardDriver implements IReadCardDriver {
+
+    private static final String TAG = "ReadCardDriver";
 
     private static final long DELAY_START_READER_SEND_BROADCAST = 500;
 
@@ -60,12 +62,12 @@ public class ReadCardDriver implements IReadCardDriver {
                     } finally {
                         Intent intent = new Intent(ReadCardConstant.BROADCAST_READ_CARD_START_READ);
                         context.getApplicationContext().sendBroadcast(intent);
-                        Logger.i("开启读卡服务成功; info:" + intent.toString());
+                        Log.i(TAG, "开启读卡服务成功; info:" + intent.toString());
                     }
                 }
             });
         } catch (Exception ex) {
-            Logger.e("开启读卡服务失败", ex);
+            Log.e(TAG, "开启读卡服务失败", ex);
         }
     }
 
@@ -85,9 +87,9 @@ public class ReadCardDriver implements IReadCardDriver {
                     mContext.getApplicationContext().stopService(tmpIntent);
                 }
             }
-            Logger.i("关闭读卡服务成功; info:" + intent.toString());
+            Log.i(TAG, "关闭读卡服务成功; info:" + intent.toString());
         } catch (Exception ex) {
-            Logger.e("关闭读卡服务失败;", ex);
+            Log.e(TAG, "关闭读卡服务失败;", ex);
         }
     }
 
