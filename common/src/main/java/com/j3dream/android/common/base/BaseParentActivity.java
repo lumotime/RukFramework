@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.j3dream.android.common.R;
 import com.j3dream.android.common.annotate.BindEventBus;
@@ -28,13 +27,11 @@ import com.j3dream.android.common.util.AndroidThreadPoolUtils;
 import com.j3dream.android.common.util.DisplayUtils;
 import com.j3dream.android.common.util.IntentUtils;
 import com.j3dream.android.common.util.ToastUtils;
-import com.j3dream.core.util.ObjectUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,10 +61,9 @@ public abstract class BaseParentActivity extends AppCompatActivity implements IV
      * 是否需要注册EventBus
      */
     private boolean isReceiveEventBus = Boolean.FALSE;
-    /**
-     * loading dialogs
-     */
-    protected List<Dialog> mLoadingDialogs = Lists.newArrayList();
+
+    private int mLoadingViewLevel = 0;
+    private Dialog mPagerLoadingDialog;
 
     /**
      * 设置当前布局资源
@@ -120,28 +116,21 @@ public abstract class BaseParentActivity extends AppCompatActivity implements IV
 
     @Override
     public void showLoading() {
-        if (AndroidThreadPoolUtils.isOnMainThread()) {
-            Dialog targetDialog;
-            if (ObjectUtils.isEmpty(mLoadingDialogs)) {
-                targetDialog = new AlertDialog.Builder(this)
-                        .create();
-                if (mLoadingDialogs == null) {
-                    mLoadingDialogs = Lists.newArrayList();
-                }
-                mLoadingDialogs.add(targetDialog);
-            } else {
-                targetDialog = mLoadingDialogs.get(0);
-            }
+        this.showLoading(false);
+    }
 
-            if (targetDialog != null) {
-                targetDialog.show();
-                int dialogSideLength = DisplayUtils.getLongSideSize() / 8;
-                Window window = targetDialog.getWindow();
-                if (window != null) {
-                    window.setLayout(dialogSideLength, dialogSideLength);
-                }
-                targetDialog.setContentView(R.layout.widget_base_loading_activity);
+    @Override
+    public void showLoading(boolean cancelable) {
+        if (AndroidThreadPoolUtils.isOnMainThread()) {
+            if (mPagerLoadingDialog == null) {
+                mPagerLoadingDialog = createLoadingDialog();
             }
+            if (mPagerLoadingDialog.isShowing()) {
+                mLoadingViewLevel++;
+                return;
+            }
+            mPagerLoadingDialog.show();
+            mPagerLoadingDialog.setCancelable(cancelable);
         } else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -155,14 +144,14 @@ public abstract class BaseParentActivity extends AppCompatActivity implements IV
     @Override
     public void hideLoading() {
         if (AndroidThreadPoolUtils.isOnMainThread()) {
-            for (Dialog mLoadingDialog : mLoadingDialogs) {
-                mLoadingDialog.cancel();
+            if (mPagerLoadingDialog == null) {
+                return;
             }
-            if (ObjectUtils.isNotEmpty(mLoadingDialogs)) {
-                Dialog dialog = mLoadingDialogs.get(0);
-                mLoadingDialogs.clear();
-                mLoadingDialogs.add(dialog);
+            if (mLoadingViewLevel > 0) {
+                mLoadingViewLevel--;
+                return;
             }
+            mPagerLoadingDialog.dismiss();
         } else {
             runOnUiThread(new Runnable() {
                 @Override
@@ -175,12 +164,29 @@ public abstract class BaseParentActivity extends AppCompatActivity implements IV
 
     @Override
     protected void onDestroy() {
-        for (Dialog mLoadingDialog : mLoadingDialogs) {
-            mLoadingDialog.cancel();
-        }
-        mLoadingDialogs.clear();
+
+        if (mPagerLoadingDialog != null && mPagerLoadingDialog.isShowing())
+            mPagerLoadingDialog.dismiss();
+
         unBindEventBus();
         super.onDestroy();
+    }
+
+    /**
+     * 创建 Loading Dialog
+     *
+     * @return loading Dialog
+     */
+    protected Dialog createLoadingDialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .create();
+        int dialogSideLength = DisplayUtils.getLongSideSize() / 8;
+        Window window = alertDialog.getWindow();
+        if (window != null) {
+            window.setLayout(dialogSideLength, dialogSideLength);
+        }
+        alertDialog.setContentView(R.layout.widget_base_loading_activity);
+        return alertDialog;
     }
 
     /**

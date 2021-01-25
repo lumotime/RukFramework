@@ -17,6 +17,13 @@ public interface IViewLoading {
     void showLoading();
 
     /**
+     * 展示加载动画
+     *
+     * @param cancelable 是否允许点击外层消失
+     */
+    void showLoading(boolean cancelable);
+
+    /**
      * 隐藏加载动画
      */
     void hideLoading();
