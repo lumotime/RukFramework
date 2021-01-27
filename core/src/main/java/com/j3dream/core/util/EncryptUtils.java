@@ -94,8 +94,14 @@ public class EncryptUtils {
     public static String encryptForRSA(String str, String publicKey) throws Exception {
         //base64编码的公钥
         byte[] decoded = EncodeUtils.decodeBase64(publicKey.getBytes(DEFAULT_CHARSET_NAME));
-        RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA", "BC")
-                .generatePublic(new X509EncodedKeySpec(decoded));
+        RSAPublicKey pubKey;
+        try {
+            pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA", "BC")
+                    .generatePublic(new X509EncodedKeySpec(decoded));
+        } catch (NoSuchAlgorithmException ex) {
+            pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA")
+                    .generatePublic(new X509EncodedKeySpec(decoded));
+        }
         //RSA加密
         Cipher cipher = Cipher.getInstance("RSA/None/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, pubKey);
@@ -116,7 +122,12 @@ public class EncryptUtils {
         byte[] inputByte = EncodeUtils.decodeBase64(str.getBytes(DEFAULT_CHARSET_NAME));
         //base64编码的私钥
         byte[] decoded = EncodeUtils.decodeBase64(privateKey.getBytes(DEFAULT_CHARSET_NAME));
-        RSAPrivateKey priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA", "BC").generatePrivate(new PKCS8EncodedKeySpec(decoded));
+        RSAPrivateKey priKey;
+        try {
+            priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA", "BC").generatePrivate(new PKCS8EncodedKeySpec(decoded));
+        } catch (NoSuchAlgorithmException ex) {
+            priKey = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decoded));
+        }
         //RSA解密
         Cipher cipher = Cipher.getInstance("RSA/None/PKCS1Padding");
         cipher.init(Cipher.DECRYPT_MODE, priKey);
