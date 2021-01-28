@@ -2,7 +2,7 @@ apply from: "${rootProject.rootDir.absolutePath}/build-library.gradle"
 
 // 当前模块配置详情
 def module_artifactId = "viewbinding"
-def module_version = "0.0.1"
+def module_version = "0.0.2"
 
 android {
     viewBinding {
@@ -12,7 +12,7 @@ android {
 
 dependencies {
     // 基础依赖
-    implementation(project(":common"))
+    implementation("com.j3dream.android:common:0.1.10")
     // viewbinding util
     implementation('com.dylanc:viewbinding-ktx:1.0.1')
     // BaseViewHolder ( 不再此库内进行第三方库的 viewbinding 适配 )
