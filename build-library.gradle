@@ -1,0 +1,33 @@
+import com.j3dream.android.build.constant.BuildConstant
+
+apply plugin: "com.android.library"
+apply plugin: "com.github.panpf.bintray-publish"
+
+android {
+    compileSdkVersion BuildConstant.DEF_COMPILE_SDK_VERSION
+    buildToolsVersion BuildConstant.DEF_BUILD_TOOLS_VERSION
+
+    defaultConfig {
+        minSdkVersion BuildConstant.DEF_MIN_SDK_VERSION
+        targetSdkVersion BuildConstant.DEF_TARGET_SDK_VERSION
+        versionCode BuildConstant.DEF_MIN_VERSION_CODE
+        versionName BuildConstant.DEF_MIN_VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+
+//bintray 配置
+publish {
+    userOrg = "${bintray_userOrg}"
+    groupId = "${bintray_groupId}"
+    desc = 'Oh hi, welcome use this android basic support library. desgin by lumo.'
+    website = "${bintray_website}"
+}

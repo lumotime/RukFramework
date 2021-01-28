@@ -1,0 +1,26 @@
+apply from: "${rootProject.rootDir.absolutePath}/build-library.gradle"
+
+// 当前模块配置详情
+def module_artifactId = "viewbinding"
+def module_version = "0.0.1"
+
+android {
+    viewBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    // 基础依赖
+    implementation(project(":common"))
+    // viewbinding util
+    implementation('com.dylanc:viewbinding-ktx:1.0.1')
+    // BaseViewHolder ( 不再此库内进行第三方库的 viewbinding 适配 )
+//    implementation('com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4')
+}
+
+//bintray 配置
+publish {
+    artifactId = "${module_artifactId}"
+    publishVersion = "${module_version}"
+}

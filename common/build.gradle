@@ -2,23 +2,16 @@ import com.j3dream.android.build.Dependencies
 import com.j3dream.android.build.constant.BuildConstant
 import com.j3dream.android.build.Modules
 
-//apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.panpf.bintray-publish'
+apply from: "${rootProject.rootDir.absolutePath}/build-library.gradle"
 
 // 当前模块配置详情
 def module_artifactId = "common"
 def module_version = Modules.M_common.versionName
 
 android {
-    compileSdkVersion BuildConstant.DEF_COMPILE_SDK_VERSION
-    buildToolsVersion BuildConstant.DEF_BUILD_TOOLS_VERSION
     defaultConfig {
-        minSdkVersion BuildConstant.DEF_MIN_SDK_VERSION
-        targetSdkVersion BuildConstant.DEF_TARGET_SDK_VERSION
         versionCode Modules.M_common.versionCode
         versionName Modules.M_common.versionName
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     lintOptions {
@@ -34,19 +27,8 @@ dependencies {
     api(Dependencies.AndroidX.core_ktx)
     api(Dependencies.eventbus)
 }
-
-tasks.withType(GenerateModuleMetadata) {
-    enabled = false
-}
-
-tasks.withType(Javadoc).all { enabled = false }
-
 // bintray 配置
 publish {
-    userOrg = "${bintray_userOrg}"
-    groupId = "${bintray_groupId}"
     artifactId = "${module_artifactId}"
     publishVersion = "${module_version}"
-    desc = 'Oh hi, welcome use this android basic support library. desgin by lumo.'
-    website = "${bintray_website}"
 }

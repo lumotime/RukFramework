@@ -1,3 +1,4 @@
+include ':viewbinding'
 rootProject.name = "RukFramework"
 
 include ':example'
