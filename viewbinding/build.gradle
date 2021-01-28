@@ -20,7 +20,10 @@ dependencies {
 }
 
 //bintray 配置
-publish {
-    artifactId = "${module_artifactId}"
-    publishVersion = "${module_version}"
+
+if ("${RELEASE_LIST}".contains(project.name)) {
+    publish {
+        artifactId = "${module_artifactId}"
+        publishVersion = "${module_version}"
+    }
 }

@@ -1,5 +1,4 @@
 import com.j3dream.android.build.Dependencies
-import com.j3dream.android.build.constant.BuildConstant
 import com.j3dream.android.build.Modules
 
 apply from: "${rootProject.rootDir.absolutePath}/build-library.gradle"
@@ -27,8 +26,11 @@ dependencies {
     api(Dependencies.AndroidX.core_ktx)
     api(Dependencies.eventbus)
 }
+
 // bintray 配置
-publish {
-    artifactId = "${module_artifactId}"
-    publishVersion = "${module_version}"
+if ("${RELEASE_LIST}".contains(project.name)){
+    publish {
+        artifactId = "${module_artifactId}"
+        publishVersion = "${module_version}"
+    }
 }
