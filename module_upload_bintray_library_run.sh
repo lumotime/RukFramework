@@ -1,1 +1,0 @@
-sh gradlew clean build bintrayUpload -PbintrayUser=lumo -PbintrayKey=a709c709d79a54f424e6f5171c2fe1b1804d8dd2 -PdryRun=false
