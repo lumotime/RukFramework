@@ -22,7 +22,6 @@ import java.lang.annotation.Target;
  * <p>所属包名: com.bloodsport.core.util</p>
  * <p>描述: 网络相关的工作集 </p>
  * <p>创建时间: 2020-01-07 15:35 </p>
- * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
  * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0

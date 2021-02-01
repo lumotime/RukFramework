@@ -1,8 +1,7 @@
 import com.j3dream.android.build.Dependencies
 import com.j3dream.android.build.Modules
 
-apply from: "${project.rootDir.path}/buildSrc/buildLibrary.gradle"
-apply plugin: 'com.github.panpf.bintray-publish'
+apply from: "${rootProject.rootDir.absolutePath}/build-library.gradle"
 
 // 当前模块配置详情
 def module_artifactId = "net"
@@ -31,18 +30,9 @@ dependencies {
     api(Dependencies.retrofit_convert_rxjava)
 }
 
-tasks.withType(GenerateModuleMetadata) {
-    enabled = false
-}
-
-tasks.withType(Javadoc).all { enabled = false }
-
-// bintray 配置
-publish {
-    userOrg = "${bintray_userOrg}"
-    groupId = "${bintray_groupId}"
-    artifactId = "${module_artifactId}"
-    publishVersion = "${module_version}"
-    desc = 'Oh hi, welcome use this android basic support library. desgin by lumo.'
-    website = "${bintray_website}"
+if ("${RELEASE_LIST}".contains(project.name)) {
+    publish {
+        artifactId = "${module_artifactId}"
+        publishVersion = "${module_version}"
+    }
 }

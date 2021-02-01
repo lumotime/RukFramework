@@ -38,7 +38,6 @@ import static com.j3dream.android.common.util.AppUtils.isAppForeground;
  * <p>所属包名: com.jnft.controller.utils</p>
  * <p>描述: 应用的活动控制 </p>
  * <p>创建时间: 2020-02-18 11:44 </p>
- * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
  * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0

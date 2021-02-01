@@ -54,7 +54,6 @@ import static com.j3dream.android.common.constant.Constants.ROOT_PERMISSION_FILE
  * <p>所属包名: com.bloodsport.lib.core.utils</p>
  * <p>描述: 系统工具类, 操作获取常用的系统信息 </p>
  * <p>创建时间: 2020/3/13 12:04 </p>
- * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
  * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
