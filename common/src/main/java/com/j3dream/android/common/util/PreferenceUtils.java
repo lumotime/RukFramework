@@ -16,7 +16,6 @@ import java.util.Set;
  * <p>所属包名: cn.novakj.j3.core.util</p>
  * <p>描述: 首选项存储工具类 </p>
  * <p>创建时间: 2020/3/13 15:12 </p>
- * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
  * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0

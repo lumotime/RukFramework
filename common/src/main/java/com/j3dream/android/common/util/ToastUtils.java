@@ -26,7 +26,6 @@ import java.lang.ref.WeakReference;
  * <p>所属包名: com.bloodsport.lib.core.util</p>
  * <p>描述: 应用工具类，可以获取应用的相关信息 </p>
  * <p>创建时间: 2020/3/13 16:35 </p>
- * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
  * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0

@@ -14,7 +14,6 @@ import static android.Manifest.permission.VIBRATE;
  * <p>所属包名: com.bloodsport.lib.core.util</p>
  * <p>描述: 传感器操作工具类 </p>
  * <p>创建时间: 2020/3/13 15:54 </p>
- * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
  * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0

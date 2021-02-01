@@ -8,7 +8,6 @@ import com.j3dream.core.util.ObjectUtils;
  * <p>所属包名: com.bloodsport.net</p>
  * <p>描述:  网络框架配置者，用于配置相关的网络框架信息 </p>
  * <p>创建时间: 2020-02-19 14:44 </p>
- * <p>公司信息: 济南丰通信息科技 技术部</p>
  *
  * @author 贾军舰(lumo) cnrivkaer@outlook.com
  * @version v1.0
