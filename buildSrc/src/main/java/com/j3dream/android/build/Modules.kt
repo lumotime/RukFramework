@@ -19,10 +19,9 @@ object Modules{
     /**
      * example android application build config
      */
-    val M_example = ModuleInfo("com.j3dream.android.example", 1, "0.0.1")
-    val M_common = ModuleInfo("com.j3dream.android.common", 1010, "0.1.10")
-    val M_idreader = ModuleInfo("com.j3dream.android.idreader", 1002, "0.1.2")
-    val M_arcface = ModuleInfo("com.j3dream.android.arcface", 1002, "0.1.2")
-    val M_net = ModuleInfo("com.j3dream.android.net", 1007, "0.1.7")
-    val M_camera = ModuleInfo("com.j3dream.android.camera", 1001, "0.1.1")
+    val M_example = ModuleInfo("com.j3dream.android.example", 1, "0.0.1", artifactId = "example")
+    val M_common = ModuleInfo("com.j3dream.android.common", 1010, "0.1.10", artifactId = "common")
+    val M_arcface = ModuleInfo("com.j3dream.android.arcface", 1002, "0.1.2", artifactId = "arcface")
+    val M_net = ModuleInfo("com.j3dream.android.net", 1007, "0.1.7", artifactId = "net")
+    val M_camera = ModuleInfo("com.j3dream.android.camera", 1001, "0.1.1", artifactId = "camera")
 }

@@ -20,5 +20,6 @@ data class ModuleInfo(
         val compileSdkVersion: Int = BuildConstant.DEF_COMPILE_SDK_VERSION,
         val buildToolsVersion: String = BuildConstant.DEF_BUILD_TOOLS_VERSION,
         val minSdkVersion: Int = BuildConstant.DEF_MIN_SDK_VERSION,
-        val targetSdkVersion: Int = BuildConstant.DEF_TARGET_SDK_VERSION
+        val targetSdkVersion: Int = BuildConstant.DEF_TARGET_SDK_VERSION,
+        val artifactId: String
 )
