@@ -1,10 +1,7 @@
 import com.j3dream.android.build.constant.BuildConstant
 
 apply plugin: "com.android.library"
-
-if ("${RELEASE_LIST}".contains(project.name)) {
-    apply plugin: "com.github.panpf.bintray-publish"
-}
+apply from: "${rootProject.rootDir.absolutePath}/upload_artifact_id.gradle"
 
 android {
     compileSdkVersion BuildConstant.DEF_COMPILE_SDK_VERSION
@@ -25,20 +22,4 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-}
-
-tasks.withType(GenerateModuleMetadata) {
-    enabled = false
-}
-
-tasks.withType(Javadoc).all { enabled = false }
-
-//bintray 配置 只有 RELEASE_LIST 中包含项目名称才会上传
-if ("${RELEASE_LIST}".contains(project.name)){
-    publish {
-        userOrg = "${bintray_userOrg}"
-        groupId = "${bintray_groupId}"
-        desc = 'Oh hi, welcome use this android basic support library. desgin by lumo.'
-        website = "${bintray_website}"
-    }
 }

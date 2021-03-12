@@ -1,11 +1,10 @@
+import com.j3dream.android.build.Modules
+
 apply plugin: 'java-library'
-if ("${RELEASE_LIST}".contains(project.name)) {
-    apply plugin: 'com.github.panpf.bintray-publish'
-}
+apply from: "${rootProject.rootDir.absolutePath}/upload_artifact_id.gradle"
 
 // 当前模块配置详情
-def module_artifactId = "core"
-def module_version = "0.0.3"
+def moduleConfig = Modules.M_core
 
 // 配置 java 环境
 sourceCompatibility = "1.7"
@@ -17,15 +16,10 @@ dependencies {
     api("commons-codec:commons-codec:1.15")
 }
 
-//bintray 配置
-if ("${RELEASE_LIST}".contains(project.name)) {
-
+// bintray 配置
+if ("${RELEASE_LIST}".contains(project.name)){
     publish {
-        userOrg = "${bintray_userOrg}"
-        groupId = "${bintray_groupId}"
-        artifactId = "${module_artifactId}"
-        publishVersion = "${module_version}"
-        desc = 'Oh hi, welcome use this android basic support library. desgin by lumo.'
-        website = "${bintray_website}"
+        artifactId = "${moduleConfig.artifactId}"
+        publishVersion = "${moduleConfig.versionName}"
     }
 }

@@ -4,14 +4,13 @@ import com.j3dream.android.build.Modules
 apply from: "${rootProject.rootDir.absolutePath}/build-library.gradle"
 
 // 当前模块配置详情
-def module_artifactId = "net"
-def module_version = Modules.M_common.versionName
+def moduleConfig = Modules.M_net
 
 android {
 
     defaultConfig {
-        versionCode Modules.M_net.versionCode
-        versionName Modules.M_net.versionName
+        versionCode moduleConfig.versionCode
+        versionName moduleConfig.versionName
     }
 
     lintOptions {
@@ -20,7 +19,7 @@ android {
 }
 
 dependencies {
-    api(project(":common"))
+    api("com.j3dream.android:common:${Modules.M_common.versionName}")
     api(Dependencies.okhttp)
     api(Dependencies.localDeps.okhttp_interceptor_logger)
     api(Dependencies.rxjava)
@@ -32,7 +31,7 @@ dependencies {
 
 if ("${RELEASE_LIST}".contains(project.name)) {
     publish {
-        artifactId = "${module_artifactId}"
-        publishVersion = "${module_version}"
+        artifactId = "${moduleConfig.artifactId}"
+        publishVersion = "${moduleConfig.versionName}"
     }
 }

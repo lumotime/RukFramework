@@ -20,8 +20,11 @@ object Modules{
      * example android application build config
      */
     val M_example = ModuleInfo("com.j3dream.android.example", 1, "0.0.1", artifactId = "example")
+    val M_core = ModuleInfo("com.j3dream.android.core", 3, "0.0.3", artifactId = "core")
     val M_common = ModuleInfo("com.j3dream.android.common", 1010, "0.1.10", artifactId = "common")
     val M_arcface = ModuleInfo("com.j3dream.android.arcface", 1002, "0.1.2", artifactId = "arcface")
-    val M_net = ModuleInfo("com.j3dream.android.net", 1007, "0.1.7", artifactId = "net")
+    val M_net = ModuleInfo("com.j3dream.android.net", 1011, "0.1.11", artifactId = "net")
     val M_camera = ModuleInfo("com.j3dream.android.camera", 1001, "0.1.1", artifactId = "camera")
+    val M_viewbinding =
+        ModuleInfo("com.j3dream.android.viewbinding", 2, "0.0.2", artifactId = "viewbinding")
 }
